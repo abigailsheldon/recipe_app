@@ -11,13 +11,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:recipe/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Main Menu buttons exist', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
     // Verify that our counter starts at 0.
-    //test to find the 
-    expect(find.widgetWithText(ElevatedButton,'Receipe'), findsOneWidget);
+    //test to find the buttons for Recipes, Favorites, Meal Planner, Grocery List
+    expect(find.widgetWithText(ElevatedButton,'Recipe'), findsOneWidget);
     expect(find.widgetWithText(ElevatedButton,'Favorites'), findsOneWidget);
     expect(find.widgetWithText(ElevatedButton,'Meal Planner'), findsOneWidget);
     expect(find.widgetWithText(ElevatedButton,'Grocery List'), findsOneWidget);
@@ -26,7 +26,7 @@ void main() {
 
     // Tap the '+' icon and trigger a frame.
    // await tester.tap(find.byIcon(Icons.add));
-   // await tester.pump();
+   await tester.pumpAndSettle();
 
     // Verify that our counter has incremented.
    
