@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'db_helper.dart';
 
 // Test comment
-
-void main() {
+final dbHelper = DatabaseHelper();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dbHelper.init();
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
