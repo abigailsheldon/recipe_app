@@ -38,53 +38,166 @@ class DatabaseHelper{
                     $description TEXT NOT NULL
                     )''');
   }
-  Future<List<Map<String,String>>> readFromExcel() async{
-    //loading excel file from assets
-    ByteData data =await rootBundle.load('assets/Recipe_table.xlsx');
-      //Read the excel file 
-      var bytes = data.buffer.asUint8List();
-      var excel = Excel.decodeBytes(bytes);//loads excel worksheet
+  // Future<List<Map<String,String>>> readFromExcel() async{
+  //   //loading excel file from assets
+  //   ByteData data =await rootBundle.load('assets/Recipe_table.xlsx');
+  //     //Read the excel file 
+  //     var bytes = data.buffer.asUint8List();
 
-      List <Map<String,String>> _excel_data = [];
+  //      print("Loaded bytes: ${bytes.sublist(0, 100)}");
+  //     var excel = Excel.decodeBytes(bytes);//loads excel worksheet
+  //       print("Excel file loaded successfully!");
 
-      for(var table in excel.tables.keys){//iterating over  each worksheet in excel file
+  //     List <Map<String,String>> _excel_data = [];
 
-        var rows =excel.tables[table]!.rows;//The worksheet object
+  //     for(var table in excel.tables.keys){//iterating over  each worksheet in excel file
+  //       print("Sheet Name: $table");
+  //       var rows =excel.tables[table]!.rows;//The worksheet object
+  //       print("Total Rows Found: ${rows.length}");
+  //       if (rows.isEmpty) {
+  //     print("No data found in sheet: $table");
+  //     continue;
+      
+  //   }
+  //    // Step 1: Find first non-empty row to use as column headers
+  //   Map<int, String> columnIndexToName = {};
+  //   int headerRowIndex = -1;
 
-        //skip the first row (header)
-        for(int i =1;i <rows.length;i++){
-          var cellData = rows[i]; //iterating over the excel worksheet object
-          if(cellData.isEmpty || cellData[0] == null)continue;// skips empty rows
+
+  //       //skip the first row (header)
+  //       for(int i =0;i <rows.length;i++){
+  //         var cellData = rows[i]; //iterating over the excel worksheet object
+  //           print("Raw row data at index $i: ${cellData.map((cell) => cell?.value).toList()}");
+  //         if(cellData.isNotEmpty && cellData.any((cell)=> cell?.value != null)){
+
+  //         }
+  //         if(cellData.isEmpty || cellData[2] == null){
+  //           print("Skipping empty row: $i");
+  //           continue;// skips empty rows
+  //         }
+  //         print("Processing row $i: ${cellData.map((cell) => cell?.value.toString()).toList()}");
 
 
-          _excel_data.add({
-            columnName:  cellData[0]?.value.toString() ?? '',
-            columnCateagory: cellData[1]?.value.toString() ?? '',
-            groceryList: cellData[2]?.value.toString() ?? '',
-            description: cellData[3]?.value.toString() ?? '',
+  //         _excel_data.add({
+  //           columnName:  cellData[0]?.value.toString() ?? '',
+  //           columnCateagory: cellData[1]?.value.toString() ?? '',
+  //           groceryList: cellData[2]?.value.toString() ?? '',
+  //           description: cellData[3]?.value.toString() ?? '',
             
-          });
+  //         });
+  //         print("Excel Row: $_excel_data");
 
-        }
+  //       }
 
 
-        // for(var row in excel.tables[table]!.rows){
-        //         List<String> filteredRow = row.
-        //         where((cell)=>cell!=null)
-        //         .map((cell)=> cell!.value.toString())
-        //         .toList();
-        //         if (filteredRow.isNotEmpty){
-        //           _excel_data.add(filteredRow);
-        //         }
-        // }
-        // break;
+  //       // for(var row in excel.tables[table]!.rows){
+  //       //         List<String> filteredRow = row.
+  //       //         where((cell)=>cell!=null)
+  //       //         .map((cell)=> cell!.value.toString())
+  //       //         .toList();
+  //       //         if (filteredRow.isNotEmpty){
+  //       //           _excel_data.add(filteredRow);
+  //       //         }
+  //       // }
+  //       // break;
         
-      }
-      return _excel_data;
+  //     }
+  //     print("Total Recipes Read: ${_excel_data.length}");
+  //     return _excel_data;
     
 
 
+  // }
+  Future<List<Map<String, dynamic>>> readFromExcel() async {
+  ByteData data = await rootBundle.load('assets/Recipe_table.xlsx');
+  var bytes = data.buffer.asUint8List();
+  var excel = Excel.decodeBytes(bytes);
+
+  List<Map<String, dynamic>> _excelData = [];
+
+  for (var sheet in excel.tables.keys) {
+    var rows = excel.tables[sheet]!.rows;
+
+    if (rows.isEmpty) {
+      print("No data found in sheet: $sheet");
+      continue;
+    }
+
+    // Step 1: Find first non-empty row to use as column headers
+    Map<int, String> headerIndexToColumnName = {};
+    int headerRowIndex = -1;
+
+    for (int i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      if (row.isNotEmpty && row.any((cell) => cell?.value != null)) { //checking to see if current row is not empty and checking each cell in the row to see if any cell isn't null
+        headerRowIndex = i; // marks the header index
+        for (int j = 0; j < row.length; j++) {
+          String columnName = row[j]?.value.toString().trim() ?? '';
+          if (columnName.isNotEmpty) {
+            headerIndexToColumnName[j] = columnName; // Map column index to header name
+          }
+        }
+        print("Identified Header Row ($headerRowIndex): $headerIndexToColumnName");
+        break;
+      }
+    }
+
+    if (headerRowIndex == -1) {
+      print("No valid header row found!");
+      return [];
+    }
+
+    // Step 2: Read Data Rows (Skipping the header row)
+    for (int i = headerRowIndex + 1; i < rows.length; i++) {
+      var row = rows[i];
+      if (row.isEmpty || row.every((cell) => cell?.value == null)) {
+        print("Skipping empty row: $i");
+        continue;
+      }
+
+      Map<String, String> rowData = {};
+      String multiLineField = "";
+
+      for (int j = 0; j < row.length; j++) {
+        if (headerIndexToColumnName.containsKey(j)) {
+          String headerName = headerIndexToColumnName[j]!; // Get header column name
+          String value = row[j]?.value.toString().trim() ?? ''; //gettign the data from each row after the header
+
+          // Check for multiline fields (concatenate data)
+          if (headerName.trim().toLowerCase() == "grocery list" || headerName.trim().toLowerCase() == "description") {
+            multiLineField += value + "\n";
+          } else {
+            rowData[headerName] = value;
+          }
+        }
+      }
+
+      // Add multi-line fields (after trimming excess newline)
+      if (multiLineField.isNotEmpty) {
+        rowData["ingredients_or_description"] = multiLineField.trim();
+      }
+
+      print("Parsed Row Data: $rowData");
+
+      // Create the properly formatted recipe object with defaults
+      var recipeToInsert = {
+        columnName: rowData['Recipe Name'] ?? 'Unnamed Recipe',  // Default if missing
+        columnFavorite: rowData['favorite'] ?? 0,  // Default to 0 if favorite is not provided
+        columnCateagory: rowData['Category'] ?? 'Uncategorized',  // Default if not provided
+        groceryList: rowData['Grocery List'] ?? '',  // Default empty string if missing
+        description: rowData['Description'] ?? '',  // Default empty string if missing
+        date: rowData['date'] ?? DateTime.now().millisecondsSinceEpoch,  // Default to current timestamp
+      };
+
+      print("Final Recipe Data for Insert: $recipeToInsert");
+      _excelData.add(recipeToInsert);
+    }
   }
+
+  return _excelData;
+}
+
+
 
 Future<void> printDatabaseStructure() async {
   if (_db == null) {
@@ -105,14 +218,32 @@ Future<void> printDatabaseStructure() async {
 
   void insertExcel(List<Map<String,dynamic>> _recipe) async{
     for(var recipe in _recipe){
+      print("*******Inserting****: $recipe"); 
       await _db.insert(table, recipe);
+      
     }
     //return await _db.insert(table, row);
   }
   Future<void> loadAndStoreRecipes() async{
-    List<Map<String,String>> _excel_sheet = await readFromExcel();
+    List<Map<String, dynamic>> _excel_sheet = await readFromExcel();
      insertExcel(_excel_sheet);
   }
+  // Future<int> numberOfRecipeName () async{
+  //    var number =Sqflite.firstIntValue( await _db.rawQuery('SELECT COUNT (*) FROM $table WHERE $columnName = ?', [columnName]));
+  //    print("there are $number recipes!!!");
+  //    return number??0;
+
+
+  // }
+  Future<List<Map<String,dynamic>>> allRecipeNames () async{
+     List<Map<String,dynamic>> result = await _db.query(table,columns:[columnName]);
+     print("this is the allrecipenames query $result");
+     List<Map<String, dynamic>> testQuery = await _db.rawQuery('SELECT recipe_name FROM $table');
+print("Recipe Names: $testQuery");
+
+    return result;
+  }
+  
   
 
 

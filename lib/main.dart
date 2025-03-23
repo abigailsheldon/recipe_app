@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe/recipe_menu.dart';
 import 'db_helper.dart';
 
 // Test comment
@@ -61,22 +62,29 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 ElevatedButton(
                     onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>const RecipeMenu()),
+
+                      );
 
                     },
                      child: Text(
                             'Recipe',
-                            selectionColor: Colors.blueAccent,
+                            style: TextStyle(color:Colors.blueAccent),
                               
 
                             ),
                 ),
                 ElevatedButton(
-                    onPressed: (){
+                    onPressed: (){ 
+                      
+                      
 
                     },
                      child: Text(
                             'Favorites',
-                            selectionColor: Colors.blueAccent,
+                            style: TextStyle(color:Colors.blueAccent),
                               
 
                             ),
@@ -87,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                      child: Text(
                             'Meal Planner',
-                            selectionColor: Colors.blueAccent,
+                            style: TextStyle(color:Colors.blueAccent),
                               
 
                             ),
@@ -98,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                      child: Text(
                             'Grocery List',
-                            selectionColor: Colors.blueAccent,
+                            style: TextStyle(color:Colors.blueAccent),
                               
 
                             ),
