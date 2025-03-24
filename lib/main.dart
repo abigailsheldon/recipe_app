@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:recipe/recipe_menu.dart';
 import 'db_helper.dart';
+import 'package:provider/provider.dart'; // This is needed to use Provider
+
 
 // Test comment
 final dbHelper = DatabaseHelper();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dbHelper.init();
-  runApp(const MyApp());
+  runApp(Provider<DatabaseHelper>(
+      create: (_) => dbHelper, // Providing DatabaseHelper here
+      child: MyApp(),
+    ),);
 
 }
 

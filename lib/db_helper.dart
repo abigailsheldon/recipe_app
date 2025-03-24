@@ -16,14 +16,14 @@ class DatabaseHelper{
   static const groceryList = 'grocery_List';
   static const description= 'description';
   late Database _db;
-  Future<void> init()async{
+  Future<Database> init()async{
     final DocumentBoundary =  await getApplicationDocumentsDirectory();
     final path = join(DocumentBoundary.path,_databaseName);
     _db =await openDatabase(path,version: _databaseVersion,onCreate: _onCreate);
     loadAndStoreRecipes();
     await printDatabaseStructure();
 
-
+    return _db;
 
   }
   Future _onCreate (Database db, int version ) async{

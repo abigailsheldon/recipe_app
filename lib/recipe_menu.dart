@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart' show Provider;
 import 'package:recipe/main.dart';
 import 'db_helper.dart';
+import 'package:provider/provider.dart';
 
 
 class RecipeMenu extends StatefulWidget {
@@ -19,7 +21,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
   @override
   void initState(){
     super.initState();
-    // db_helper = DatabaseHelper();
+final dbhelper = Provider.of<DatabaseHelper>(context, listen: false);
     _getAllRecipeData();
   
 
