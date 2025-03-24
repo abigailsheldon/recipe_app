@@ -116,7 +116,7 @@ class DatabaseHelper{
   List<Map<String, dynamic>> _excelData = [];
 
   for (var sheet in excel.tables.keys) {
-    var rows = excel.tables[sheet]!.rows;
+    var rows = excel.tables[sheet]!.rows;//this is a single worksheet object
 
     if (rows.isEmpty) {
       print("No data found in sheet: $sheet");
@@ -124,7 +124,7 @@ class DatabaseHelper{
     }
 
     // Step 1: Find first non-empty row to use as column headers
-    Map<int, String> headerIndexToColumnName = {};
+    Map<int, String> headerIndexToColumnName = {};//take in the index of each column in the header 
     int headerRowIndex = -1;
 
     for (int i = 0; i < rows.length; i++) {
@@ -156,7 +156,8 @@ class DatabaseHelper{
       }
 
       Map<String, String> rowData = {};
-      String multiLineField = "";
+      String _description = "";
+      String _groceryList ="";
 
       for (int j = 0; j < row.length; j++) {
         if (headerIndexToColumnName.containsKey(j)) {
@@ -164,8 +165,10 @@ class DatabaseHelper{
           String value = row[j]?.value.toString().trim() ?? ''; //gettign the data from each row after the header
 
           // Check for multiline fields (concatenate data)
-          if (headerName.trim().toLowerCase() == "grocery list" || headerName.trim().toLowerCase() == "description") {
-            multiLineField += value + "\n";
+          if (headerName.trim().toLowerCase() == "description") {
+            _description += value + "\n";
+          } else if (headerName.trim().toLowerCase() == "grocery list" ){
+               _groceryList += value + "\n";
           } else {
             rowData[headerName] = value;
           }
@@ -173,8 +176,11 @@ class DatabaseHelper{
       }
 
       // Add multi-line fields (after trimming excess newline)
-      if (multiLineField.isNotEmpty) {
-        rowData["ingredients_or_description"] = multiLineField.trim();
+      if (_description.isNotEmpty) {
+        rowData["Description"] = _description.trim();
+      }
+      if(_groceryList.isNotEmpty){
+         rowData["Grocery List"] = _groceryList.trim();
       }
 
       print("Parsed Row Data: $rowData");
@@ -213,17 +219,75 @@ Future<void> printDatabaseStructure() async {
     print(column);
   }
 }
+//check if recipe has been inserted already 
+Future<bool> doesRecipeExist(Map<String, dynamic> recipe) async {
+  
+  
+  final columnValue = recipe[columnName];
+  final categorValue = recipe[columnCateagory];
+  final decriptionValue = recipe[description];
+  final dateValue = recipe[date];
+  final groceryListValue = recipe[groceryList];
+  
+  print("Checking recipe with values:");
+  print("  Name: $columnValue");
+  print("  Category: $categorValue");
+  print("  Description: $decriptionValue");
+  print("  Date: $dateValue");
+  print("  Grocery List: $groceryListValue");
+
+  final List<Map<String, dynamic>> isduplicate = await _db.query(
+    table,
+    where: '$columnName = ? AND $columnCateagory = ? AND $groceryList= ? AND $description = ?',
+    whereArgs: [
+      columnValue,
+      categorValue,
+      groceryListValue,
+      decriptionValue,
+    ],
+  );
+
+  print("Query Result: $isduplicate");
+
+  if (isduplicate.isNotEmpty) {
+    print("Recipe already exists: $columnValue");
+    return true;
+  }
+
+  print("No duplicate found.");
+  
+  return false;
+}
+
+Future<void> resetDatabase() async {
+  // Delete all the records in the table
+  await _db.delete(table);
+
+  print("Database reset successfully.");
+}
 
 
+  void insertExcel(List<Map<String, dynamic>> _recipe) async {
+  //await resetDatabase();
 
-  void insertExcel(List<Map<String,dynamic>> _recipe) async{
-    for(var recipe in _recipe){
+  for (var recipe in _recipe) {
+    // Print the recipe being checked
+    print("Checking recipe: ${recipe['recipe_name']}");
+    
+    bool duplicate = await doesRecipeExist(recipe); // This is where the duplicate check happens
+
+    // Debug print after calling the duplicate check
+    print("Duplicate check for ${recipe['recipe_name']}: $duplicate");
+
+    if (!duplicate) {
       print("*******Inserting****: $recipe"); 
       await _db.insert(table, recipe);
-      
+    } else {
+      print('Recipe already exists: ${recipe['recipe_name']}');
     }
-    //return await _db.insert(table, row);
   }
+}
+
   Future<void> loadAndStoreRecipes() async{
     List<Map<String, dynamic>> _excel_sheet = await readFromExcel();
      insertExcel(_excel_sheet);
