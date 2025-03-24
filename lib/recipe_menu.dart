@@ -54,7 +54,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
   });
       
      
-       print("recipe count from db : $recipeNumber");
+       print("*****recipe count from db **********: ${recipeNames.length}");
        print("Recipes: $recipeNames");
   }
   // void _getAllRecipes () async{
