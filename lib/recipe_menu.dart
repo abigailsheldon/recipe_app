@@ -3,6 +3,7 @@ import 'package:provider/provider.dart' show Provider;
 import 'package:recipe/main.dart';
 import 'db_helper.dart';
 import 'package:provider/provider.dart';
+import 'recipe_details.dart';
 
 
 class RecipeMenu extends StatefulWidget {
@@ -37,9 +38,17 @@ final dbhelper = Provider.of<DatabaseHelper>(context, listen: false);
       ListView.builder(
       itemCount: recipeNames.length,
       itemBuilder: (context,index){
-        return ElevatedButton(onPressed: (){
-
-        }, child: Text(recipeNames[index][DatabaseHelper.columnName]));
+        return ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RecipeDetailPage(recipe: recipeNames[index]),
+              ),
+            );
+          },
+          child: Text(recipeNames[index][DatabaseHelper.columnName]),
+        );
 
       })
 
