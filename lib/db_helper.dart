@@ -111,6 +111,7 @@ class DatabaseHelper{
   Future<List<Map<String, dynamic>>> readFromExcel() async {
   ByteData data = await rootBundle.load('assets/Recipe_table.xlsx');
   var bytes = data.buffer.asUint8List();
+  print("size of excel worksheet***** $bytes");
   var excel = Excel.decodeBytes(bytes);
 
   List<Map<String, dynamic>> _excelData = [];

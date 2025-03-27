@@ -16,6 +16,8 @@ class RecipeMenu extends StatefulWidget {
 }
 class _Recipe_Menu extends State<RecipeMenu>{
   late int recipeNumber = 0 ;
+  //favoriteRecipe
+  Map<String,bool> favoriteTask= {};
   // late DatabaseHelper db_helper;
   List<Map<String,dynamic>> recipeNames = [];
   @override
@@ -35,13 +37,31 @@ final dbhelper = Provider.of<DatabaseHelper>(context, listen: false);
       body: recipeNames.isEmpty
         ?const Center(child: CircularProgressIndicator()):
       ListView.builder(
+        
       itemCount: recipeNames.length,
       itemBuilder: (context,index){
-        return ElevatedButton(onPressed: (){
+        String name = recipeNames[index][DatabaseHelper.columnName];
+        return ListTile(
+          leading: Checkbox(
+              value: favoriteTask[name] ??false , 
+              onChanged: (bool?value){
+                //method to handle selected checkbox
 
-        }, child: Text(recipeNames[index][DatabaseHelper.columnName]));
+               }
+          ),
+          title: ElevatedButton(
+          
+          onPressed: (){
 
+        }, 
+          child: Text(name, 
+                      style: TextStyle(color: Colors.blueAccent))
+        )
+        );
+          
       })
+      
+      
 
     );
   }
