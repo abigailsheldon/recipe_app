@@ -16,6 +16,7 @@ class RecipeMenu extends StatefulWidget {
 }
 class _Recipe_Menu extends State<RecipeMenu>{
   late int recipeNumber = 0 ;
+  late int? recipeId = 0;
   //favoriteRecipe
   Map<String,bool> favoriteSelectedRecipe= {};
   // late DatabaseHelper db_helper;
@@ -35,12 +36,14 @@ class _Recipe_Menu extends State<RecipeMenu>{
   
 
   }
-  void _favoritSelection(String recipe, bool? value){
+  void _favoritSelection(String recipe, bool? value) async{
       setState(() {
         favoriteSelectedRecipe[recipe] = value ?? false;
         if(value == true){
           if(!checked.contains(recipe)){
+            _getRecipeId(recipe);
             checked.add(recipe);
+            
             unchecked.remove(recipe);
 
           }
@@ -75,6 +78,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
               onChanged: (bool?value){
                 //method to handle selected checkbox
                 _favoritSelection(name, value);
+                
 
                }
           ),
@@ -107,6 +111,15 @@ class _Recipe_Menu extends State<RecipeMenu>{
      
        print("*****recipe count from db **********: ${recipeNames.length}");
        print("Recipes: $recipeNames");
+  }
+  void _getRecipeId(String recipe) async{
+    int? _id = await dbHelper.getRecipteNameById(recipe);
+    setState(() {
+      recipeId = _id;
+
+      
+    });
+    
   }
   // void _getAllRecipes () async{
   //   await db_helper.allRecipeNames();

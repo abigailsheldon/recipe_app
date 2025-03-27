@@ -206,6 +206,7 @@ class DatabaseHelper{
 
 
 
+
 Future<void> printDatabaseStructure() async {
   if (_db == null) {
       print("Database is not initialized.");
@@ -267,6 +268,22 @@ Future<void> resetDatabase() async {
   print("Database reset successfully.");
 }
 
+
+//update method to update the database the favorite column in db
+// Future<void> updateFavoriteStatus(String _favoriteRecipe,bool ? status) async {
+//     await _db.update(table, values)
+
+
+// }
+//method to get recipe id 
+Future<int?> getRecipteNameById (String _recipeName) async{
+  List<Map<String,dynamic>> _id = await _db.query(table,columns: ['id'] ,where: '$columnName = ?', whereArgs: [_recipeName]);
+  print("this is the id number for  $_recipeName *** :   ${_id.first['id'] as int}");
+  if(_id.isNotEmpty){
+    return _id.first['id'] as int;
+  }
+  return null;
+}
 
   void insertExcel(List<Map<String, dynamic>> _recipe) async {
   //await resetDatabase();
