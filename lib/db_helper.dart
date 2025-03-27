@@ -277,10 +277,10 @@ Future<void> resetDatabase() async {
 // }
 //method to get recipe id 
 Future<int?> getRecipteNameById (String _recipeName) async{
-  List<Map<String,dynamic>> _id = await _db.query(table,columns: ['id'] ,where: '$columnName = ?', whereArgs: [_recipeName]);
-  print("this is the id number for  $_recipeName *** :   ${_id.first['id'] as int}");
-  if(_id.isNotEmpty){
-    return _id.first['id'] as int;
+  List<Map<String,dynamic>> id = await _db.query(table,columns: [columnId] ,where: '$columnName = ?', whereArgs: [_recipeName]);
+  print("this is the id number for  $_recipeName *** :   ${id.first[columnId] as int}");
+  if(id.isNotEmpty){
+    return id.first[columnId] as int;
   }
   return null;
 }

@@ -41,10 +41,12 @@ class _Recipe_Menu extends State<RecipeMenu>{
         favoriteSelectedRecipe[recipe] = value ?? false;
         if(value == true){
           if(!checked.contains(recipe)){
-            _getRecipeId(recipe);
-            checked.add(recipe);
-            
-            unchecked.remove(recipe);
+            print("before getRecipeId call****");
+            _getRecipeId(recipe);//grab id of the recipe that was checked
+            print("After RecipeIdcall***");
+            checked.add(recipe); //add selected recipe to checked list
+
+            unchecked.remove(recipe); // remove checked recipe from unchecked recipe list
 
           }
           else{
