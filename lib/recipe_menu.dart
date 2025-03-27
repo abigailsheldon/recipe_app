@@ -17,15 +17,43 @@ class RecipeMenu extends StatefulWidget {
 class _Recipe_Menu extends State<RecipeMenu>{
   late int recipeNumber = 0 ;
   //favoriteRecipe
-  Map<String,bool> favoriteTask= {};
+  Map<String,bool> favoriteSelectedRecipe= {};
   // late DatabaseHelper db_helper;
   List<Map<String,dynamic>> recipeNames = [];
+  // List contains recipe names that are unchecked
+  List<String> unchecked =[];
+  List<String> checked=[];
   @override
   void initState(){
     super.initState();
-final dbhelper = Provider.of<DatabaseHelper>(context, listen: false);
+    final dbhelper = Provider.of<DatabaseHelper>(context, listen: false);
     _getAllRecipeData();
+    unchecked = List.from(recipeNames);
+    for(var _recipe in List.from(recipeNames)){
+        favoriteSelectedRecipe[_recipe] = false;
+    }
   
+
+  }
+  void _favoritSelection(String recipe, bool? value){
+      setState(() {
+        favoriteSelectedRecipe[recipe] = value ?? false;
+        if(value == true){
+          if(!checked.contains(recipe)){
+            checked.add(recipe);
+            unchecked.remove(recipe);
+
+          }
+          else{
+            if(!unchecked.contains(recipe)){
+              unchecked.add(recipe);
+              checked.remove(recipe);
+            }
+          }
+
+        }
+        
+      });
 
   }
   
@@ -43,9 +71,10 @@ final dbhelper = Provider.of<DatabaseHelper>(context, listen: false);
         String name = recipeNames[index][DatabaseHelper.columnName];
         return ListTile(
           leading: Checkbox(
-              value: favoriteTask[name] ??false , 
+              value: favoriteSelectedRecipe[name] ??false , 
               onChanged: (bool?value){
                 //method to handle selected checkbox
+                _favoritSelection(name, value);
 
                }
           ),
