@@ -4,7 +4,7 @@
             "outputFile": "com.example.recipe.app-mergeDebugResources-24:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/main/res/values-night/styles.xml",
+                    "source": "/Users/pocketpuppy/Desktop/recipe_app/recipe_app/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
