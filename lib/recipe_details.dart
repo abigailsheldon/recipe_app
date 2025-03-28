@@ -7,12 +7,14 @@ class RecipeDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int dateValue = recipe[DatabaseHelper.date] ?? DateTime.now().millisecondsSinceEpoch;
+    // Use the current timestamp if recipe[DatabaseHelper.date] is null.
+    final int dateValue =
+        recipe[DatabaseHelper.date] ?? DateTime.now().millisecondsSinceEpoch;
     final DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
 
     return Scaffold(
       appBar: AppBar(title: Text(recipe[DatabaseHelper.columnName])),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,13 +24,15 @@ class RecipeDetailPage extends StatelessWidget {
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 10),
+            // Grocery List (Ingredients) appears first now.
             Text(
-              "Description:\n${recipe[DatabaseHelper.description]}",
+              "Grocery List:\n${recipe[DatabaseHelper.groceryList]}",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
+            // Description appears after the Grocery List.
             Text(
-              "Grocery List:\n${recipe[DatabaseHelper.groceryList]}",
+              "Description:\n${recipe[DatabaseHelper.description]}",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
