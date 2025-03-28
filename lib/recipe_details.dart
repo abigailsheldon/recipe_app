@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'db_helper.dart';
+import 'grocery_list.dart'; // import the new page
 
 class RecipeDetailPage extends StatelessWidget {
   final Map<String, dynamic> recipe;
@@ -7,7 +8,6 @@ class RecipeDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use the current timestamp if recipe[DatabaseHelper.date] is null.
     final int dateValue =
         recipe[DatabaseHelper.date] ?? DateTime.now().millisecondsSinceEpoch;
     final DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
@@ -24,13 +24,11 @@ class RecipeDetailPage extends StatelessWidget {
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 10),
-            // Grocery List (Ingredients) appears first now.
             Text(
               "Grocery List:\n${recipe[DatabaseHelper.groceryList]}",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
-            // Description appears after the Grocery List.
             Text(
               "Description:\n${recipe[DatabaseHelper.description]}",
               style: const TextStyle(fontSize: 16),
@@ -39,6 +37,24 @@ class RecipeDetailPage extends StatelessWidget {
             Text(
               "Date: ${recipeDate.toLocal()}",
               style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            // Button to navigate to the GroceryListPage
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GroceryListPage(
+                        groceryListText:
+                            recipe[DatabaseHelper.groceryList] ?? '',
+                      ),
+                    ),
+                  );
+                },
+                child: const Text("View Grocery List"),
+              ),
             ),
           ],
         ),
