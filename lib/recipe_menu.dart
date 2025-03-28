@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
+import 'package:recipe/favorite_menu.dart';
 import 'package:recipe/main.dart';
 import 'db_helper.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe/recipe_menu.dart';
 
 
 class RecipeMenu extends StatefulWidget {
@@ -39,7 +41,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
 
   }
   void _favoritSelection(String recipe, bool? value) async{
-      setState(()  {
+      setState(()  async {
         favoriteSelectedRecipe[recipe] = value ?? false;
         if(value == true){
           if(!checked.contains(recipe)){
@@ -86,7 +88,12 @@ class _Recipe_Menu extends State<RecipeMenu>{
       appBar: AppBar(title: const Text ("Recipes")),
       body: recipeNames.isEmpty
         ?const Center(child: CircularProgressIndicator()):
-      ListView.builder(
+      Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(child: 
+           ListView.builder(
+          
         
       itemCount: recipeNames.length,
       itemBuilder: (context,index){
@@ -111,7 +118,19 @@ class _Recipe_Menu extends State<RecipeMenu>{
         )
         );
           
-      })
+      })),
+      Padding(padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FavoriteMenu(recipe_Name: checked),)
+            );
+          }, child: Text("view favorite list")),)
+        
+        ]
+       
+      ),
+        
       
       
 
