@@ -270,11 +270,19 @@ Future<void> resetDatabase() async {
 
 
 //update method to update the database the favorite column in db
-// Future<void> updateFavoriteStatus(String _favoriteRecipe,bool ? status) async {
-//     await _db.update(table, values)
+Future<int> updateFavoriteStatus(Map<String,dynamic> row) async {
+    int id = row[columnId];
+    
+    // for(var singrow in test){
+    //   print("status query: ${singrow[columnId]}***");
+    int result = await _db.update(table, row,where: '$columnId = ?', whereArgs: [id]);
+    List<Map<String,dynamic>> test = await _db.query(table,columns: [columnFavorite],where: '$columnId = ?', whereArgs:[id] );
+    print("testing query to see favorite status : $test****");
+    return result;
 
 
-// }
+
+}
 //method to get recipe id 
 Future<int?> getRecipteNameById (String _recipeName) async{
   List<Map<String,dynamic>> id = await _db.query(table,columns: [columnId] ,where: '$columnName = ?', whereArgs: [_recipeName]);
