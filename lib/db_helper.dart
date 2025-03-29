@@ -57,76 +57,7 @@ class DatabaseHelper{
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     // Add migration logic if needed.
   }
-  // Future<List<Map<String,String>>> readFromExcel() async{
-  //   //loading excel file from assets
-  //   ByteData data =await rootBundle.load('assets/Recipe_table.xlsx');
-  //     //Read the excel file 
-  //     var bytes = data.buffer.asUint8List();
-
-  //      print("Loaded bytes: ${bytes.sublist(0, 100)}");
-  //     var excel = Excel.decodeBytes(bytes);//loads excel worksheet
-  //       print("Excel file loaded successfully!");
-
-  //     List <Map<String,String>> _excel_data = [];
-
-  //     for(var table in excel.tables.keys){//iterating over  each worksheet in excel file
-  //       print("Sheet Name: $table");
-  //       var rows =excel.tables[table]!.rows;//The worksheet object
-  //       print("Total Rows Found: ${rows.length}");
-  //       if (rows.isEmpty) {
-  //     print("No data found in sheet: $table");
-  //     continue;
-      
-  //   }
-  //    // Step 1: Find first non-empty row to use as column headers
-  //   Map<int, String> columnIndexToName = {};
-  //   int headerRowIndex = -1;
-
-
-  //       //skip the first row (header)
-  //       for(int i =0;i <rows.length;i++){
-  //         var cellData = rows[i]; //iterating over the excel worksheet object
-  //           print("Raw row data at index $i: ${cellData.map((cell) => cell?.value).toList()}");
-  //         if(cellData.isNotEmpty && cellData.any((cell)=> cell?.value != null)){
-
-  //         }
-  //         if(cellData.isEmpty || cellData[2] == null){
-  //           print("Skipping empty row: $i");
-  //           continue;// skips empty rows
-  //         }
-  //         print("Processing row $i: ${cellData.map((cell) => cell?.value.toString()).toList()}");
-
-
-  //         _excel_data.add({
-  //           columnName:  cellData[0]?.value.toString() ?? '',
-  //           columnCateagory: cellData[1]?.value.toString() ?? '',
-  //           groceryList: cellData[2]?.value.toString() ?? '',
-  //           description: cellData[3]?.value.toString() ?? '',
-            
-  //         });
-  //         print("Excel Row: $_excel_data");
-
-  //       }
-
-
-  //       // for(var row in excel.tables[table]!.rows){
-  //       //         List<String> filteredRow = row.
-  //       //         where((cell)=>cell!=null)
-  //       //         .map((cell)=> cell!.value.toString())
-  //       //         .toList();
-  //       //         if (filteredRow.isNotEmpty){
-  //       //           _excel_data.add(filteredRow);
-  //       //         }
-  //       // }
-  //       // break;
-        
-  //     }
-  //     print("Total Recipes Read: ${_excel_data.length}");
-  //     return _excel_data;
-    
-
-
-  // }
+ 
   Future<List<Map<String, dynamic>>> readFromExcel() async {
   ByteData data = await rootBundle.load('assets/Recipe_table.xlsx');
   var bytes = data.buffer.asUint8List();
