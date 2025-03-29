@@ -268,13 +268,7 @@ Future<int?> getRecipteNameById (String _recipeName) async{
     List<Map<String, dynamic>> _excel_sheet = await readFromExcel();
      insertExcel(_excel_sheet);
   }
-  // Future<int> numberOfRecipeName () async{
-  //    var number =Sqflite.firstIntValue( await _db.rawQuery('SELECT COUNT (*) FROM $table WHERE $columnName = ?', [columnName]));
-  //    print("there are $number recipes!!!");
-  //    return number??0;
-
-
-  // }
+  
   Future<List<Map<String,dynamic>>> allRecipeNames () async{
      List<Map<String,dynamic>> result = await _db.query(table);
      print("this is the allrecipenames query $result");
