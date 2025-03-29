@@ -16,16 +16,28 @@ class DatabaseHelper{
   static const groceryList = 'grocery_List';
   static const description= 'description';
   late Database _db;
-  Future<Database> init()async{
-    final DocumentBoundary =  await getApplicationDocumentsDirectory();
-    final path = join(DocumentBoundary.path,_databaseName);
-    _db =await openDatabase(path,version: _databaseVersion,onCreate: _onCreate);
-    loadAndStoreRecipes();
-    await printDatabaseStructure();
+  //  * - Prints the database structure.
+  //  */
+  Future<Database> init() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = join(directory.path, _databaseName);
+    _db = await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
 
-    return _db;
+    // Wipe the database each time (development only)
+    await resetDatabase();
+
+    // Load the Excel file and populate the database
+    await loadAndStoreRecipes();
+    
+   return _db;
 
   }
+
   Future _onCreate (Database db, int version ) async{
     await db.execute('''
                     Create Table $table(
@@ -37,6 +49,13 @@ class DatabaseHelper{
                     $groceryList TEXT NOT NULL,
                     $description TEXT NOT NULL
                     )''');
+  }
+   /* 
+   * onUpgrade: Called when the database needs to be upgraded.
+   * Add migration logic here if necessary.
+   */
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Add migration logic if needed.
   }
   // Future<List<Map<String,String>>> readFromExcel() async{
   //   //loading excel file from assets
