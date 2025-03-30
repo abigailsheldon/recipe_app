@@ -259,7 +259,7 @@ Future<int?> getRecipteNameById (String _recipeName) async{
   return null;
 }
 
-  void insertExcel(List<Map<String, dynamic>> _recipe) async {
+  Future<void> insertExcel(List<Map<String, dynamic>> _recipe) async {
   //await resetDatabase();
 
   for (var recipe in _recipe) {

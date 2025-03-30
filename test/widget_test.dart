@@ -6,83 +6,111 @@ import 'package:recipe/main.dart';
 import 'package:sqflite/sqlite_api.dart' show Database;
 import 'package:mocktail/mocktail.dart';
 
-// Mock class for Database (Mocktail)
+// ---------------------------------------------------------------------------
+// Mock class for Database using Mocktail. Simulates
+// interactions with an sqflite Database.
+// ---------------------------------------------------------------------------
 class MockDatabase extends Mock implements Database {}
 
-// Mock class for DatabaseHelper
+// ---------------------------------------------------------------------------
+// Mock class for DatabaseHelper.
+// ---------------------------------------------------------------------------
 class MockDatabaseHelper extends Mock implements DatabaseHelper {
   late Database _db;
 
   @override
   Future<Database> init() async {
-    _db = MockDatabase(); // Return a mock database instance
+    // Create and return a mock Database instance.
+    _db = MockDatabase();
     return _db;
   }
 
-  // Mock the `query` method to simulate data returned from the database
+  // Overriding the query method to simulate data from the database.
   @override
   Future<List<Map<String, dynamic>>> query(String table, {List<String>? columns}) async {
-    // Mock data for testing
+    // Return a fixed set of mock recipes.
     return [
-      {'recipe_name': 'pancakes'},
-      {'recipe_name': 'spaghetti'}
+      {'recipe_name': 'pancakes', DatabaseHelper.columnFavorite: 0, DatabaseHelper.columnCateagory: 'Breakfast', DatabaseHelper.description: 'Mix ingredients\nCook on griddle', DatabaseHelper.groceryList: 'Flour\nEggs'},
+      {'recipe_name': 'spaghetti', DatabaseHelper.columnFavorite: 0, DatabaseHelper.columnCateagory: 'Italian', DatabaseHelper.description: 'Boil pasta\nAdd sauce', DatabaseHelper.groceryList: 'Pasta\nTomato sauce'}
     ];
   }
 }
 
 void main() {
+  // ---------------------------------------------------------------------------
+  // Declare mock variables.
+  // ---------------------------------------------------------------------------
   late MockDatabaseHelper mockDatabaseHelper;
   late MockDatabase mockDatabase;
 
-  // Register the fallback value for mocktail
+  // ---------------------------------------------------------------------------
+  // Set up a fallback for any Database values needed by mocktail.
+  // ---------------------------------------------------------------------------
   setUpAll(() {
-    registerFallbackValue(MockDatabase()); // Mocktail fallback for Database type
+    registerFallbackValue(MockDatabase());
   });
 
+  // ---------------------------------------------------------------------------
+  // Before each test, initialize mock objects and set up behavior.
+  // ---------------------------------------------------------------------------
   setUp(() {
-    // Initialize mock instances
-    mockDatabaseHelper = MockDatabaseHelper(); // Use MockDatabaseHelper here
+    mockDatabaseHelper = MockDatabaseHelper();
     mockDatabase = MockDatabase();
 
-    // Mock methods from DatabaseHelper and Database
+    // Simulate a transaction call on the mock database.
     when(() => mockDatabase.transaction(any())).thenAnswer((_) async => {});
+
+    // When query is called on the mock database, return mock recipes.
     when(() => mockDatabase.query(any(), columns: any(named: 'columns'))).thenAnswer((_) async => [
-      {'recipe_name': 'pancakes'},
-      {'recipe_name': 'spaghetti'}
+      {'recipe_name': 'pancakes', DatabaseHelper.columnFavorite: 0, DatabaseHelper.columnCateagory: 'Breakfast', DatabaseHelper.description: 'Mix ingredients\nCook on griddle', DatabaseHelper.groceryList: 'Flour\nEggs'},
+      {'recipe_name': 'spaghetti', DatabaseHelper.columnFavorite: 0, DatabaseHelper.columnCateagory: 'Italian', DatabaseHelper.description: 'Boil pasta\nAdd sauce', DatabaseHelper.groceryList: 'Pasta\nTomato sauce'}
     ]);
-    // Mock the init method to return a mock database instance
+
+    // When init is called on the DatabaseHelper, return mockDatabase.
     when(() => mockDatabaseHelper.init()).thenAnswer((_) async => mockDatabase);
   });
 
   group('Main Menu test', () {
+    // -------------------------------------------------------------------------
+    // Test: Check that the database helper initializes a Database.
+    // -------------------------------------------------------------------------
     test('Check Database initialized', () async {
-      // Test if the database helper is correctly initialized
       final db = await mockDatabaseHelper.init();
       expect(db, isA<Database>());
     });
 
+    // -------------------------------------------------------------------------
+    // Widget Test: Verify that the main menu contains all required buttons.
+    // -------------------------------------------------------------------------
     testWidgets('Main Menu buttons exist', (WidgetTester tester) async {
-      // Build the app and trigger a frame
+      // Build the MyApp widget.
       await tester.pumpWidget(const MyApp());
 
-      // Test to find the buttons for Recipes, Favorites, Meal Planner, Grocery List
+      // Verify that the Recipe button is present.
       expect(find.widgetWithText(ElevatedButton, 'Recipe'), findsOneWidget);
-      expect(find.widgetWithText(ElevatedButton, 'Favorites'), findsOneWidget);
+      // Verify that the Favorite Recipes button is present.
+      expect(find.widgetWithText(ElevatedButton, 'Favorite Recipes'), findsOneWidget);
+      // Verify that the Meal Planner button is present.
       expect(find.widgetWithText(ElevatedButton, 'Meal Planner'), findsOneWidget);
+      // Verify that the Grocery List button is present.
       expect(find.widgetWithText(ElevatedButton, 'Grocery List'), findsOneWidget);
 
-      // Wait for the widgets to settle after any changes
+      // Allow the UI to settle.
       await tester.pumpAndSettle();
     });
 
+    // -------------------------------------------------------------------------
+    // Widget Test: Verify that tapping the Recipe button navigates to RecipeMenu.
+    // -------------------------------------------------------------------------
     testWidgets('on tap recipe button brings recipe menu up', (WidgetTester tester) async {
+      // Build the MyApp widget.
       await tester.pumpWidget(const MyApp());
 
-      // Tap the 'Recipe' button
+      // Tap the 'Recipe' button.
       await tester.tap(find.widgetWithText(ElevatedButton, 'Recipe'));
       await tester.pumpAndSettle();
 
-      // Verify that the RecipeMenu widget is displayed after the tap
+      // Verify that the RecipeMenu widget is now displayed.
       expect(find.byType(RecipeMenu), findsOneWidget);
     });
   });
