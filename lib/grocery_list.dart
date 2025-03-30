@@ -45,7 +45,7 @@ class _GroceryListPageState extends State<GroceryListPage> {
   /* 
    * cleanIngredient:
    * Uses a regular expression to remove measurement information from the start
-   * of an ingredient string (e.g. "1/4 tsp", "1/2 cup"). Adjust the regex as needed.
+   * of an ingredient string (e.g. "1/4 tsp", "1/2 cup").
    */
   String cleanIngredient(String ingredient) {
     final pattern = RegExp(
