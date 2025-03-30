@@ -3,6 +3,7 @@ import 'package:recipe/recipe_menu.dart';
 import 'db_helper.dart';
 import 'package:provider/provider.dart'; // This is needed to use Provider
 import 'favorite_menu.dart';
+import 'package:recipe/meal_planner.dart';
 
 final dbHelper = DatabaseHelper();
 
@@ -71,6 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(
                   onPressed: () {
                     // Add functionality for Meal Planner here.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MealPlanner()),
+                    );
                   },
                   child: const Text(
                     'Meal Planner',
