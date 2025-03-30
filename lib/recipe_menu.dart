@@ -9,7 +9,7 @@ import 'favorite_menu.dart';
  * 
  * Displays a list of recipes fetched from the database.
  * Each recipe is shown in a Card that contains:
- *  - A rectangular container at the top displaying the recipe title.
+ *  - A rectangular container at the top displaying the recipe title in a pixel-art style.
  *  - A heart icon in the top-right corner for toggling the favorite status.
  *  - A "Recipe Details" button that navigates to the RecipeDetailPage.
  * At the bottom, there's a button to view the saved favorite recipes.
@@ -37,6 +37,26 @@ class _RecipeMenuState extends State<RecipeMenu> {
 
   @override
   Widget build(BuildContext context) {
+    // Common pixel-art style decoration for the recipe cards.
+    BoxDecoration pixelDecoration = BoxDecoration(
+      color: Colors.white,
+      border: Border.all(color: Colors.black, width: 2),
+      borderRadius: BorderRadius.zero,
+    );
+
+    TextStyle titleTextStyle = const TextStyle(
+      fontFamily: 'PixelifySans', // Make sure this font is added in pubspec.yaml.
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    );
+
+    TextStyle buttonTextStyle = const TextStyle(
+      fontFamily: 'PixelifySans',
+      fontSize: 12,
+      color: Colors.black,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Recipes"),
@@ -71,92 +91,111 @@ class _RecipeMenuState extends State<RecipeMenu> {
                   child: ListView.builder(
                     itemCount: recipeNames.length,
                     itemBuilder: (context, index) {
-                      String name =
-                          recipeNames[index][DatabaseHelper.columnName];
+                      String name = recipeNames[index][DatabaseHelper.columnName];
+
                       return Card(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              border: Border.all(color: Colors.black, width: 2),
+                              borderRadius: BorderRadius.zero,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
                                       child: Text(
                                         name,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                         textAlign: TextAlign.center,
+                                        style: titleTextStyle,
                                       ),
                                     ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      favoriteSelectedRecipe[name] ?? false
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color: favoriteSelectedRecipe[name] ?? false
-                                          ? Colors.red
-                                          : Colors.grey,
+                                    IconButton(
+                                      icon: Icon(
+                                        favoriteSelectedRecipe[name] ?? false
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: favoriteSelectedRecipe[name] ?? false
+                                            ? Colors.red
+                                            : Colors.grey,
+                                      ),
+                                      onPressed: () {
+                                        bool newVal = !(favoriteSelectedRecipe[name] ?? false);
+                                        _favoriteSelection(name, newVal);
+                                      },
                                     ),
-                                    onPressed: () {
-                                      // Toggle favorite status when heart icon is tapped.
-                                      bool newVal =
-                                          !(favoriteSelectedRecipe[name] ?? false);
-                                      _favoriteSelection(name, newVal);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              // Button to navigate to Recipe Details page.
-                              ElevatedButton(
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RecipeDetailPage(
-                                          recipe: recipeNames[index]),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey[400],
+                                    elevation: 4,
+                                    shadowColor: Colors.grey[600],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.zero,
+                                      side: const BorderSide(color: Colors.grey, width: 1),
                                     ),
-                                  );
-                                  _getAllRecipeData();
-                                },
-                                child: const Text("Recipe Details"),
-                              ),
-                            ],
+                                  ),
+                                  onPressed: () async {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RecipeDetailPage(recipe: recipeNames[index]),
+                                      ),
+                                    );
+                                    _getAllRecipeData();
+                                  },
+                                  child: Text("Recipe Details", style: buttonTextStyle),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
                     },
+
                   ),
                 ),
-                // Button at the bottom to view favorites.
+                // Button at the bottom to view favorite recipes.
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[400],
+                      elevation: 4,
+                      shadowColor: Colors.grey[600],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                        side: const BorderSide(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                      ),
+                    ),
                     onPressed: () async {
-                      final dbHelper =
-                          Provider.of<DatabaseHelper>(context, listen: false);
+                      final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
                       List<String> favs = await dbHelper.getFavoriteRecipeNames();
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              FavoriteMenu(recipe_Name: favs),
+                          builder: (context) => FavoriteMenu(recipe_Name: favs),
                         ),
                       );
                       _getAllRecipeData();
                     },
-                    child: const Text("View Favorite List"),
+                    child: const Text(
+                      "View Favorite List",
+                      style: TextStyle(fontFamily: 'PixelifySans', fontSize: 12, color: Colors.black),
+                    ),
                   ),
                 ),
               ],

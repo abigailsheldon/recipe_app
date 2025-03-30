@@ -110,36 +110,53 @@ class RecipeDetailPage extends StatelessWidget {
             const SizedBox(height: 24),
             // Button to navigate to the Grocery List page (for the recipe)
             Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[400],
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Container(
+                // This container adds a hard drop shadow
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey[600]!, // Darker color for a hard shadow.
+                      offset: const Offset(0, 2), // Shadow appears 2 pixels below.
+                      blurRadius: 1, // No fuzziness.
+                    ),
+                  ],
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GroceryListPage(
-                        groceryListText:
-                            recipe[DatabaseHelper.groceryList] ?? '',
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[400],
+                    elevation: 0, // Disable default elevation so our shadow shows.
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                      side: const BorderSide(
+                        color: Colors.grey,
+                        width: 1,
                       ),
                     ),
-                  );
-                },
-                child: const Text(
-                  "View Recipe Grocery List",
-                  style: TextStyle(
-                    fontFamily: 'PixelifySans',
-                    fontSize: 14,
-                    color: Colors.black,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GroceryListPage(
+                          groceryListText:
+                              recipe[DatabaseHelper.groceryList] ?? '',
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "View Recipe Grocery List",
+                    style: TextStyle(
+                      fontFamily: 'PixelifySans',
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
             ),
+
           ],
         ),
       ),
