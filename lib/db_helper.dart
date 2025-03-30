@@ -233,6 +233,22 @@ Future<int> updateFavoriteStatus(Map<String,dynamic> row) async {
 
 
 }
+
+/* 
+  * Retrieves all favorite recipes (where favorite equals 1) from the database.
+  * Returns a list of recipe names.
+  */
+Future<List<String>> getFavoriteRecipeNames() async {
+    List<Map<String, dynamic>> result = await _db.query(
+      table,
+      columns: [columnName],
+      where: '$columnFavorite = ?',
+      whereArgs: [1],
+    );
+    return result.map((e) => e[columnName] as String).toList();
+}
+
+
 // Gets recipe id 
 Future<int?> getRecipteNameById (String _recipeName) async{
   List<Map<String,dynamic>> id = await _db.query(table,columns: [columnId] ,where: '$columnName = ?', whereArgs: [_recipeName]);
