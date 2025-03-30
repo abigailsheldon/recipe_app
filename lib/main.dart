@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
       title: 'Recipe App',
       theme: ThemeData(
         fontFamily: 'PixelifySans',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
       ),
       home: const MyHomePage(title: 'Recipe App Home Page'),
     );
@@ -53,8 +52,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: pixelTitleTextStyle),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(
+          widget.title,
+          style: pixelTitleTextStyle.copyWith(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF000080),
       ),
       body: Center(
         child: Padding(
