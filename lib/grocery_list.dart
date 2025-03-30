@@ -24,32 +24,24 @@ class GroceryListPage extends StatefulWidget {
 
 class _GroceryListPageState extends State<GroceryListPage> {
   late List<String> ingredients;
-  // Local map to track checkbox states for each ingredient.
   Map<String, bool> localSelection = {};
 
   @override
   void initState() {
     super.initState();
-    // Split text by newline, remove empty lines, and clean each ingredient.
     ingredients = widget.groceryListText
         .split('\n')
         .where((item) => item.trim().isNotEmpty)
         .map((ingredient) => cleanIngredient(ingredient))
         .toList();
-    // Initialize all selections to false.
     for (var ingredient in ingredients) {
       localSelection[ingredient] = false;
     }
   }
 
-  /* 
-   * cleanIngredient:
-   * Uses a regular expression to remove measurement information from the start
-   * of an ingredient string (e.g. "1/4 tsp", "1/2 cup").
-   */
   String cleanIngredient(String ingredient) {
     final pattern = RegExp(
-      r'^\s*\d+([\/\.\d]+)?\s*(cup|cups|tsp|teaspoon|teaspoons|tbsp|tablespoon|tablespoons|ounce|ounces|oz|pound|lb|lbs)\s+',
+      r'^\s*(\d+(?:\s+\d+\/\d+)?|\d*\/\d+|\d+(\.\d+)?)\s*(cup|cups|tsp|teaspoon|teaspoons|tbsp|tablespoon|tablespoons|ounce|ounces|oz|pound|lb|lbs)?\s+',
       caseSensitive: false,
     );
     return ingredient.replaceFirst(pattern, '').trim();
@@ -69,7 +61,13 @@ class _GroceryListPageState extends State<GroceryListPage> {
               itemBuilder: (context, index) {
                 String ingredient = ingredients[index];
                 return CheckboxListTile(
-                  title: Text(ingredient),
+                  title: Text(
+                    ingredient,
+                    style: const TextStyle(
+                      fontFamily: 'PixelifySans',
+                      fontSize: 14,
+                    ),
+                  ),
                   value: localSelection[ingredient],
                   onChanged: (bool? value) {
                     setState(() {
@@ -90,18 +88,33 @@ class _GroceryListPageState extends State<GroceryListPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey[400],
+                elevation: 4,
+                shadowColor: Colors.grey[600],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: const BorderSide(color: Colors.grey, width: 1),
+                ),
+              ),
               onPressed: () {
                 var groceryListModel =
                     Provider.of<GroceryListModel>(context, listen: false);
                 setState(() {
-                  // Mark all ingredients as selected and add to the global model.
                   for (var ingredient in ingredients) {
                     localSelection[ingredient] = true;
                     groceryListModel.addIngredient(ingredient);
                   }
                 });
               },
-              child: const Text("Add All"),
+              child: const Text(
+                "Add All",
+                style: TextStyle(
+                  fontFamily: 'PixelifySans',
+                  fontSize: 12,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
         ],
