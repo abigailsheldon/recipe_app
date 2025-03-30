@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(32.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[ 
+            children: <Widget>[
               // Navigate to Recipe Menu Page
               ElevatedButton(
                 style: pixelButtonStyle,
@@ -89,10 +89,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CollectedGroceryListPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const CollectedGroceryListPage()),
                   );
                 },
                 child: Text('Grocery List', style: pixelButtonTextStyle),
+              ),
+              const SizedBox(height: 16),
+              // Navigate to Favorites Page
+              ElevatedButton(
+                style: pixelButtonStyle,
+                onPressed: () async {
+                  final dbHelper =
+                      Provider.of<DatabaseHelper>(context, listen: false);
+                  List<String> favs = await dbHelper.getFavoriteRecipeNames();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FavoriteMenu(recipe_Name: favs),
+                    ),
+                  );
+                },
+                child: Text('Favorite Recipes', style: pixelButtonTextStyle),
               ),
             ],
           ),

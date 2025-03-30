@@ -12,6 +12,8 @@ import 'pixel_recipe_card.dart';
  * Displays a list of recipes fetched from the database.
  * Each recipe is shown using PixelRecipeCard for consistent pixel-art styling.
  * The favorite toggle is handled separately.
+ * 
+ * Now, the recipe card shows only a preview (first line) of the recipe directions.
  */
 class RecipeMenu extends StatefulWidget {
   const RecipeMenu({super.key});
@@ -45,7 +47,8 @@ class _RecipeMenuState extends State<RecipeMenu> {
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed: () async {
-              final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
+              final dbHelper =
+                  Provider.of<DatabaseHelper>(context, listen: false);
               List<String> favs = await dbHelper.getFavoriteRecipeNames();
               await Navigator.push(
                 context,
@@ -65,12 +68,20 @@ class _RecipeMenuState extends State<RecipeMenu> {
               itemBuilder: (context, index) {
                 final recipe = recipeNames[index];
                 String name = recipe[DatabaseHelper.columnName];
+                // Get the full recipe directions from the database.
+                String fullDescription = recipe[DatabaseHelper.description] ?? "";
+                // Split the description by newline to get the first line.
+                List<String> lines = fullDescription.split('\n');
+                String preview = lines.isNotEmpty ? lines[0] : "";
+                if (lines.length > 1) {
+                  preview += " ...";
+                }
                 return Stack(
                   children: [
-                    // Use PixelRecipeCard for consistent styling.
+                    // Use PixelRecipeCard for consistent styling, passing the preview.
                     PixelRecipeCard(
                       title: name,
-                      description: recipe[DatabaseHelper.description],
+                      description: preview,
                       onDetailsPressed: () async {
                         await Navigator.push(
                           context,
@@ -109,7 +120,8 @@ class _RecipeMenuState extends State<RecipeMenu> {
         child: ElevatedButton(
           style: pixelButtonStyle,
           onPressed: () async {
-            final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
+            final dbHelper =
+                Provider.of<DatabaseHelper>(context, listen: false);
             List<String> favs = await dbHelper.getFavoriteRecipeNames();
             await Navigator.push(
               context,
@@ -138,7 +150,8 @@ class _RecipeMenuState extends State<RecipeMenu> {
       recipeNames = allRecipes;
       for (var recipe in recipeNames) {
         String name = recipe[DatabaseHelper.columnName];
-        favoriteSelectedRecipe[name] = recipe[DatabaseHelper.columnFavorite] == 1;
+        favoriteSelectedRecipe[name] =
+            recipe[DatabaseHelper.columnFavorite] == 1;
       }
     });
   }
