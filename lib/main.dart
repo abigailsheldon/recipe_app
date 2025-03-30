@@ -67,23 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(color: Colors.blueAccent),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    // Retrieve favorite recipe names from the database.
-                    final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-                    List<String> favs = await dbHelper.getFavoriteRecipeNames();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FavoriteMenu(recipe_Name: favs),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Favorites',
-                    style: TextStyle(color: Colors.blueAccent),
-                  ),
-                ),
+                
                 ElevatedButton(
                   onPressed: () {
                     // Add functionality for Meal Planner here.
