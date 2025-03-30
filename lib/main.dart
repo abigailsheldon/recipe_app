@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:recipe/recipe_menu.dart';
 import 'db_helper.dart';
-import 'package:provider/provider.dart'; // This is needed to use Provider
 import 'favorite_menu.dart';
+import 'grocery_list_model.dart';
+import 'collected_grocery_list.dart';
 
 final dbHelper = DatabaseHelper();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await dbHelper.init();
-  runApp(Provider<DatabaseHelper>(
-    create: (_) => dbHelper, // Providing DatabaseHelper here
-    child: MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<DatabaseHelper>(create: (_) => dbHelper),
+        ChangeNotifierProvider<GroceryListModel>(create: (_) => GroceryListModel()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -67,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(color: Colors.blueAccent),
                   ),
                 ),
-                
                 ElevatedButton(
                   onPressed: () {
                     // Add functionality for Meal Planner here.
@@ -79,7 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Add functionality for Grocery List here.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CollectedGroceryListPage()),
+                    );
                   },
                   child: const Text(
                     'Grocery List',
