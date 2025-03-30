@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe/recipe_menu.dart';
 import 'db_helper.dart';
 import 'favorite_menu.dart';
 import 'grocery_list_model.dart';
 import 'collected_grocery_list.dart';
+import 'recipe_menu.dart';
 
 final dbHelper = DatabaseHelper();
 
@@ -15,7 +15,8 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         Provider<DatabaseHelper>(create: (_) => dbHelper),
-        ChangeNotifierProvider<GroceryListModel>(create: (_) => GroceryListModel()),
+        ChangeNotifierProvider<GroceryListModel>(
+            create: (_) => GroceryListModel()),
       ],
       child: const MyApp(),
     ),
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Recipe App',
       theme: ThemeData(
+        // Adjust your retro color scheme here.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
       ),
       home: const MyHomePage(title: 'Recipe App Home Page'),
@@ -64,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const RecipeMenu()),
+                      MaterialPageRoute(
+                          builder: (context) => const RecipeMenu()),
                     );
                   },
                   child: const Text(
@@ -86,7 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CollectedGroceryListPage()),
+                          builder: (context) =>
+                              const CollectedGroceryListPage()),
                     );
                   },
                   child: const Text(
