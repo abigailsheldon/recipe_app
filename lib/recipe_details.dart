@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'db_helper.dart';
-import 'grocery_list.dart'; // Make sure this file is present
+import 'grocery_list.dart';
 
-/* 
+/*
  * RecipeDetailPage
  *
- * Displays full details for a recipe, including category, grocery list,
- * description, and date. It also includes a button to navigate to the 
- * GroceryListPage which displays the grocery list as individual ingredients.
+ * Displays full details for a recipe (category, grocery list, description, date).
+ * Includes a button to navigate to GroceryListPage, where the user can check ingredients.
  */
 class RecipeDetailPage extends StatelessWidget {
   final Map<String, dynamic> recipe;
@@ -15,7 +14,6 @@ class RecipeDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use the current timestamp if the recipe's date field is missing.
     final int dateValue =
         recipe[DatabaseHelper.date] ?? DateTime.now().millisecondsSinceEpoch;
     final DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
@@ -60,7 +58,7 @@ class RecipeDetailPage extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text("View Grocery List"),
+                child: const Text("View Recipe Grocery List"),
               ),
             ),
           ],
