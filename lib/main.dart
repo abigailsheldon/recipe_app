@@ -5,6 +5,7 @@ import 'favorite_menu.dart';
 import 'grocery_list_model.dart';
 import 'collected_grocery_list.dart';
 import 'recipe_menu.dart';
+import 'styles.dart';
 
 final dbHelper = DatabaseHelper();
 
@@ -50,25 +51,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    TextStyle buttonTextStyle = const TextStyle(
-      fontFamily: 'PixelifySans',
-      fontSize: 14,
-      color: Colors.black,
-    );
-
-    ButtonStyle pixelButtonStyle = ElevatedButton.styleFrom(
-      backgroundColor: Colors.grey[300],
-      elevation: 4,
-      shadowColor: Colors.grey[600],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-        side: const BorderSide(color: Colors.black, width: 2),
-      ),
-    );
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: const TextStyle(fontFamily: 'PixelifySans')),
+        title: Text(widget.title, style: pixelTitleTextStyle),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
@@ -77,6 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              // Navigate to Recipe Menu Page
               ElevatedButton(
                 style: pixelButtonStyle,
                 onPressed: () {
@@ -85,26 +71,46 @@ class _MyHomePageState extends State<MyHomePage> {
                     MaterialPageRoute(builder: (context) => const RecipeMenu()),
                   );
                 },
-                child: Text('Recipe', style: buttonTextStyle),
+                child: Text('Recipe', style: pixelButtonTextStyle),
               ),
               const SizedBox(height: 16),
+              // Placeholder for future Meal Planner feature
               ElevatedButton(
                 style: pixelButtonStyle,
                 onPressed: () {
                   // Add functionality for Meal Planner here.
                 },
-                child: Text('Meal Planner', style: buttonTextStyle),
+                child: Text('Meal Planner', style: pixelButtonTextStyle),
               ),
               const SizedBox(height: 16),
+              // Navigate to Collected Grocery List Page
               ElevatedButton(
                 style: pixelButtonStyle,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CollectedGroceryListPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const CollectedGroceryListPage()),
                   );
                 },
-                child: Text('Grocery List', style: buttonTextStyle),
+                child: Text('Grocery List', style: pixelButtonTextStyle),
+              ),
+              const SizedBox(height: 16),
+              // Navigate to Favorites Page
+              ElevatedButton(
+                style: pixelButtonStyle,
+                onPressed: () async {
+                  final dbHelper =
+                      Provider.of<DatabaseHelper>(context, listen: false);
+                  List<String> favs = await dbHelper.getFavoriteRecipeNames();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FavoriteMenu(recipe_Name: favs),
+                    ),
+                  );
+                },
+                child: Text('Favorite Recipes', style: pixelButtonTextStyle),
               ),
             ],
           ),

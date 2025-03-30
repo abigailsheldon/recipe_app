@@ -3,16 +3,17 @@ import 'package:provider/provider.dart';
 import 'db_helper.dart';
 import 'recipe_details.dart';
 import 'favorite_menu.dart';
+import 'styles.dart';
+import 'pixel_recipe_card.dart';
 
 /* 
  * RecipeMenu Page
  * 
  * Displays a list of recipes fetched from the database.
- * Each recipe is shown in a Card that contains:
- *  - A rectangular container at the top displaying the recipe title in a pixel-art style.
- *  - A heart icon in the top-right corner for toggling the favorite status.
- *  - A "Recipe Details" button that navigates to the RecipeDetailPage.
- * At the bottom, there's a button to view the saved favorite recipes.
+ * Each recipe is shown using PixelRecipeCard for consistent pixel-art styling.
+ * The favorite toggle is handled separately.
+ * 
+ * Now, the recipe card shows only a preview (first line) of the recipe directions.
  */
 class RecipeMenu extends StatefulWidget {
   const RecipeMenu({super.key});
@@ -25,9 +26,6 @@ class _RecipeMenuState extends State<RecipeMenu> {
   List<Map<String, dynamic>> recipeNames = [];
   // Map to track the favorite selection status for each recipe.
   Map<String, bool> favoriteSelectedRecipe = {};
-  // Lists to track favorite recipes.
-  List<String> checked = [];
-  List<String> unchecked = [];
 
   @override
   void initState() {
@@ -37,29 +35,9 @@ class _RecipeMenuState extends State<RecipeMenu> {
 
   @override
   Widget build(BuildContext context) {
-    // Common pixel-art style decoration for the recipe cards.
-    BoxDecoration pixelDecoration = BoxDecoration(
-      color: Colors.white,
-      border: Border.all(color: Colors.black, width: 2),
-      borderRadius: BorderRadius.zero,
-    );
-
-    TextStyle titleTextStyle = const TextStyle(
-      fontFamily: 'PixelifySans', // Make sure this font is added in pubspec.yaml.
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    );
-
-    TextStyle buttonTextStyle = const TextStyle(
-      fontFamily: 'PixelifySans',
-      fontSize: 12,
-      color: Colors.black,
-    );
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Recipes"),
+        title: const Text("Recipes", style: pixelTitleTextStyle),
         actions: [
           /* 
            * Favorites Button:
@@ -85,121 +63,77 @@ class _RecipeMenuState extends State<RecipeMenu> {
       ),
       body: recipeNames.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: recipeNames.length,
-                    itemBuilder: (context, index) {
-                      String name = recipeNames[index][DatabaseHelper.columnName];
-
-                      return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              border: Border.all(color: Colors.black, width: 2),
-                              borderRadius: BorderRadius.zero,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        name,
-                                        textAlign: TextAlign.center,
-                                        style: titleTextStyle,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        favoriteSelectedRecipe[name] ?? false
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: favoriteSelectedRecipe[name] ?? false
-                                            ? Colors.red
-                                            : Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        bool newVal = !(favoriteSelectedRecipe[name] ?? false);
-                                        _favoriteSelection(name, newVal);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.grey[400],
-                                    elevation: 4,
-                                    shadowColor: Colors.grey[600],
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.zero,
-                                      side: const BorderSide(color: Colors.grey, width: 1),
-                                    ),
-                                  ),
-                                  onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            RecipeDetailPage(recipe: recipeNames[index]),
-                                      ),
-                                    );
-                                    _getAllRecipeData();
-                                  },
-                                  child: Text("Recipe Details", style: buttonTextStyle),
-                                ),
-                              ],
-                            ),
+          : ListView.builder(
+              itemCount: recipeNames.length,
+              itemBuilder: (context, index) {
+                final recipe = recipeNames[index];
+                String name = recipe[DatabaseHelper.columnName];
+                // Get the full recipe directions from the database.
+                String fullDescription = recipe[DatabaseHelper.description] ?? "";
+                // Split the description by newline to get the first line.
+                List<String> lines = fullDescription.split('\n');
+                String preview = lines.isNotEmpty ? lines[0] : "";
+                if (lines.length > 1) {
+                  preview += " ...";
+                }
+                return Stack(
+                  children: [
+                    // Use PixelRecipeCard for consistent styling, passing the preview.
+                    PixelRecipeCard(
+                      title: name,
+                      description: preview,
+                      onDetailsPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RecipeDetailPage(recipe: recipe),
                           ),
+                        );
+                        _getAllRecipeData();
+                      },
+                    ),
+                    // Favorite toggle positioned at the top-right of the card.
+                    Positioned(
+                      right: 0,
+                      child: IconButton(
+                        icon: Icon(
+                          favoriteSelectedRecipe[name] ?? false
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: favoriteSelectedRecipe[name] ?? false
+                              ? Colors.red
+                              : Colors.grey,
                         ),
-                      );
-                    },
-
-                  ),
-                ),
-                // Button at the bottom to view favorite recipes.
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[400],
-                      elevation: 4,
-                      shadowColor: Colors.grey[600],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side: const BorderSide(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
+                        onPressed: () {
+                          bool newVal = !(favoriteSelectedRecipe[name] ?? false);
+                          _favoriteSelection(name, newVal);
+                        },
                       ),
                     ),
-                    onPressed: () async {
-                      final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-                      List<String> favs = await dbHelper.getFavoriteRecipeNames();
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FavoriteMenu(recipe_Name: favs),
-                        ),
-                      );
-                      _getAllRecipeData();
-                    },
-                    child: const Text(
-                      "View Favorite List",
-                      style: TextStyle(fontFamily: 'PixelifySans', fontSize: 12, color: Colors.black),
-                    ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
+      // Button at the bottom to view favorite recipes.
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          style: pixelButtonStyle,
+          onPressed: () async {
+            final dbHelper =
+                Provider.of<DatabaseHelper>(context, listen: false);
+            List<String> favs = await dbHelper.getFavoriteRecipeNames();
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FavoriteMenu(recipe_Name: favs),
+              ),
+            );
+            _getAllRecipeData();
+          },
+          child: Text("View Favorite List", style: pixelButtonTextStyle),
+        ),
+      ),
     );
   }
 
@@ -219,25 +153,12 @@ class _RecipeMenuState extends State<RecipeMenu> {
         favoriteSelectedRecipe[name] =
             recipe[DatabaseHelper.columnFavorite] == 1;
       }
-      unchecked = recipeNames
-          .map((recipe) => recipe[DatabaseHelper.columnName] as String)
-          .toList();
-      checked = recipeNames
-          .where((recipe) => recipe[DatabaseHelper.columnFavorite] == 1)
-          .map((recipe) => recipe[DatabaseHelper.columnName] as String)
-          .toList();
     });
-    print("***** Recipe count from DB: ${recipeNames.length}");
-    print("Recipes: $recipeNames");
   }
 
   /* 
    * _favoriteSelection:
-   * Handles the toggling of a recipe's favorite status when the heart icon is tapped.
-   * - Updates the local favoriteSelectedRecipe map.
-   * - Retrieves the recipe's ID.
-   * - Persists the new favorite status (1 for favorite, 0 for not favorite) in the database.
-   * - Updates the local checked/unchecked lists.
+   * Handles toggling a recipe's favorite status when the heart icon is tapped.
    */
   void _favoriteSelection(String recipe, bool? value) async {
     final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
@@ -253,29 +174,14 @@ class _RecipeMenuState extends State<RecipeMenu> {
       };
       await dbHelper.updateFavoriteStatus(row);
     }
-    setState(() {
-      if (value == true) {
-        if (!checked.contains(recipe)) {
-          checked.add(recipe);
-          unchecked.remove(recipe);
-        }
-      } else {
-        if (!unchecked.contains(recipe)) {
-          unchecked.add(recipe);
-          checked.remove(recipe);
-        }
-      }
-    });
   }
 
   /* 
    * _getRecipeId:
    * Retrieves the database ID for a given recipe name using DatabaseHelper.getRecipteNameById.
-   * Returns the ID as an integer, or null if not found.
    */
   Future<int?> _getRecipeId(String recipe) async {
     final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-    int? id = await dbHelper.getRecipteNameById(recipe);
-    return id;
+    return await dbHelper.getRecipteNameById(recipe);
   }
 }

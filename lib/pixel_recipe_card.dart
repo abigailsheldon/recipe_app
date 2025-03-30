@@ -1,9 +1,11 @@
 // pixel_recipe_card.dart
 import 'package:flutter/material.dart';
 
-/// A custom pixel-art style recipe card.
-/// This widget displays the recipe title in a header area using the Pixelify Sans font,
-/// a description, and a button that triggers a callback (e.g., to navigate to a details page).
+/* A custom pixel-art style recipe card.
+* This widget displays the recipe title in a header area using the Pixelify Sans font,
+* a description, and a button that triggers a callback (e.g., to navigate to a details page).
+*/
+
 class PixelRecipeCard extends StatelessWidget {
   final String title;
   final String description;

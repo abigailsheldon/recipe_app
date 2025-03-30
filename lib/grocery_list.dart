@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'grocery_list_model.dart';
+import 'styles.dart';
+
 
 /* 
  * GroceryListPage

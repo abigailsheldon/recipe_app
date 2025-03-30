@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'grocery_list_model.dart';
+import 'styles.dart';
 
 /*
  * CollectedGroceryListPage
@@ -13,15 +14,16 @@ class CollectedGroceryListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle pixelStyle = TextStyle(
-      fontFamily: 'PixelifySans',
-      fontSize: 14,
-      color: Colors.black,
+    // Define a pixel-style decoration for grocery list items.
+    final BoxDecoration listItemDecoration = BoxDecoration(
+      color: Colors.grey[200],
+      border: Border.all(color: Colors.black, width: 2),
+      borderRadius: BorderRadius.zero,
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Collected Grocery List", style: TextStyle(fontFamily: 'PixelifySans')),
+        title: const Text("Collected Grocery List", style: pixelTitleTextStyle),
       ),
       body: Consumer<GroceryListModel>(
         builder: (context, groceryListModel, child) {
@@ -29,7 +31,7 @@ class CollectedGroceryListPage extends StatelessWidget {
             return const Center(
               child: Text(
                 "No ingredients selected.",
-                style: TextStyle(fontFamily: 'PixelifySans', fontSize: 16),
+                style: pixelTitleTextStyle,
               ),
             );
           }
@@ -42,11 +44,7 @@ class CollectedGroceryListPage extends StatelessWidget {
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.black, width: 2),
-                    borderRadius: BorderRadius.zero,
-                  ),
+                  decoration: listItemDecoration,
                   child: Row(
                     children: [
                       const Icon(Icons.check, color: Colors.green),
@@ -54,7 +52,7 @@ class CollectedGroceryListPage extends StatelessWidget {
                       Expanded(
                         child: Text(
                           groceryListModel.selectedIngredients[index],
-                          style: pixelStyle,
+                          style: pixelButtonTextStyle.copyWith(fontSize: 14),
                         ),
                       ),
                     ],
