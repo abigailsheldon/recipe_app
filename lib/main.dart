@@ -60,7 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
           widget.title,
           style: pixelTitleTextStyle.copyWith(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF000080),
+        backgroundColor: const Color(0xFF0078D7),
+
       ),
       body: Center(
 
