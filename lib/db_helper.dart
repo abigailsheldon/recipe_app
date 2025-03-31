@@ -28,7 +28,7 @@ class DatabaseHelper{
       onUpgrade: _onUpgrade,
     );
 
-    // Wipe the database each time (development only)
+    // Wipe the database each time
     await resetDatabase();
 
     // Load the Excel file and populate the database
@@ -67,7 +67,7 @@ class DatabaseHelper{
   List<Map<String, dynamic>> _excelData = [];
 
   for (var sheet in excel.tables.keys) {
-    var rows = excel.tables[sheet]!.rows;//this is a single worksheet object
+    var rows = excel.tables[sheet]!.rows; // This is a single worksheet object
 
     if (rows.isEmpty) {
       print("No data found in sheet: $sheet");
@@ -98,7 +98,7 @@ class DatabaseHelper{
       return [];
     }
 
-    // Step 2: Read Data Rows (Skipping the header row)
+    // Step 2: Read Data Rows (skip header row)
     for (int i = headerRowIndex + 1; i < rows.length; i++) {
       var row = rows[i];
       if (row.isEmpty || row.every((cell) => cell?.value == null)) {
@@ -113,7 +113,7 @@ class DatabaseHelper{
       for (int j = 0; j < row.length; j++) {
         if (headerIndexToColumnName.containsKey(j)) {
           String headerName = headerIndexToColumnName[j]!; // Get header column name
-          String value = row[j]?.value.toString().trim() ?? ''; //gettign the data from each row after the header
+          String value = row[j]?.value.toString().trim() ?? ''; // Get the data from each row after the header
 
           // Check for multiline fields (concatenate data)
           if (headerName.trim().toLowerCase() == "description") {
@@ -171,7 +171,7 @@ Future<void> printDatabaseStructure() async {
     print(column);
   }
 }
-//check if recipe has been inserted already 
+// Check if recipe has been inserted already 
 Future<bool> doesRecipeExist(Map<String, dynamic> recipe) async {
   
   
@@ -219,7 +219,7 @@ Future<void> resetDatabase() async {
 }
 
 
-//update method to update the database the favorite column in db
+// Updates the favorite column in db
 Future<int> updateFavoriteStatus(Map<String,dynamic> row) async {
     int id = row[columnId];
     
@@ -233,7 +233,23 @@ Future<int> updateFavoriteStatus(Map<String,dynamic> row) async {
 
 
 }
-//method to get recipe id 
+
+/* 
+  * Retrieves all favorite recipes (where favorite equals 1) from the database.
+  * Returns a list of recipe names.
+  */
+Future<List<String>> getFavoriteRecipeNames() async {
+    List<Map<String, dynamic>> result = await _db.query(
+      table,
+      columns: [columnName],
+      where: '$columnFavorite = ?',
+      whereArgs: [1],
+    );
+    return result.map((e) => e[columnName] as String).toList();
+}
+
+
+// Gets recipe id 
 Future<int?> getRecipteNameById (String _recipeName) async{
   List<Map<String,dynamic>> id = await _db.query(table,columns: [columnId] ,where: '$columnName = ?', whereArgs: [_recipeName]);
   print("this is the id number for  $_recipeName *** :   ${id.first[columnId] as int}");
@@ -243,7 +259,7 @@ Future<int?> getRecipteNameById (String _recipeName) async{
   return null;
 }
 
-  void insertExcel(List<Map<String, dynamic>> _recipe) async {
+  Future<void> insertExcel(List<Map<String, dynamic>> _recipe) async {
   //await resetDatabase();
 
   for (var recipe in _recipe) {
