@@ -6,6 +6,7 @@ import 'grocery_list_model.dart';
 import 'collected_grocery_list.dart';
 import 'recipe_menu.dart';
 import 'styles.dart';
+import 'dart:io';
 
 final dbHelper = DatabaseHelper();
 
@@ -114,6 +115,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: Text('Favorite Recipes', style: pixelButtonTextStyle),
               ),
+              // Button to download favorited recipes
+              ElevatedButton(
+                style: pixelButtonStyle,
+                onPressed: () async {
+                  final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
+                  File file = await dbHelper.downloadFavoriteRecipes();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Favorite recipes downloaded to: ${file.path}")),
+                  );
+                },
+                child: Text('Download Favorite Recipes', style: pixelButtonTextStyle),
+              ),
+              const SizedBox(height: 16),
+
             ],
           ),
         ),
