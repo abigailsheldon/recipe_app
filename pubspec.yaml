@@ -17,7 +17,10 @@ dependencies:
   path_provider: ^2.1.5
   sqflite: ^2.3.0       # Added here for production code
   path: ^1.8.3 
-
+  dotted_border: ^2.1.0
+  super_drag_and_drop: ^0.8.24
+  table_calendar: ^3.2.0
+  intl: ^0.20.2
     
 
   # The following adds the Cupertino Icons font to your application.

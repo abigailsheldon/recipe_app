@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'db_helper.dart';
 import 'grocery_list.dart';
 import 'styles.dart';
@@ -18,8 +19,9 @@ class RecipeDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Convert the stored timestamp to a DateTime.
     final int dateValue =
-        recipe[DatabaseHelper.date] ?? DateTime.now().millisecondsSinceEpoch;
-    final DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
+        recipe[DatabaseHelper.date] ?? 0;
+     DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
+    String formatedDate =  dateValue == 0? "No date assigned":DateFormat('yyyy-MM-dd').format(recipeDate);
 
     // Instead of defining styles here, we could move the decoration to styles.dart.
     final BoxDecoration pixelDecoration = BoxDecoration(
@@ -78,15 +80,12 @@ class RecipeDetailPage extends StatelessWidget {
                 style: pixelButtonTextStyle,
               ),
             ),
-            const SizedBox(height: 16),
-            // Recipe Date
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: pixelDecoration,
-              child: Text(
-                "Date: ${recipeDate.toLocal()}",
-                style: pixelButtonTextStyle,
-              ),
+
+            const SizedBox(height: 10),
+            Text(
+             recipe[DatabaseHelper.date] ==0 ?"Please go to planner to assign a date to ${recipe[DatabaseHelper.columnName]}": "Date: ${recipeDate}",
+              style: const TextStyle(fontSize: 16),
+
             ),
             const SizedBox(height: 24),
             // Button to view Grocery List for the recipe.

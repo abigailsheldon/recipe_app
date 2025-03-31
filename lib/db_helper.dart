@@ -147,7 +147,7 @@ class DatabaseHelper{
         columnCateagory: rowData['Category'] ?? 'Uncategorized',  // Default if not provided
         groceryList: rowData['Grocery List'] ?? '',  // Default empty string if missing
         description: rowData['Description'] ?? '',  // Default empty string if missing
-        date: rowData['date'] ?? DateTime.now().millisecondsSinceEpoch,  // Default to current timestamp
+       date: rowData['date'] ?? 0,  // Default to current timestamp
       };
 
       print("Final Recipe Data for Insert: $recipeToInsert");

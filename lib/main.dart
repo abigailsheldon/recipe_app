@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'db_helper.dart';
 import 'favorite_menu.dart';
+
+import 'package:recipe/meal_planner.dart';
+
 import 'grocery_list_model.dart';
 import 'collected_grocery_list.dart';
 import 'recipe_menu.dart';
 import 'styles.dart';
 import 'dart:io';
+
 
 final dbHelper = DatabaseHelper();
 
@@ -60,7 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: const Color(0xFF000080),
       ),
       body: Center(
-        child: Padding(
+
+                child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -82,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: pixelButtonStyle,
                 onPressed: () {
                   // Add functionality for Meal Planner here.
+                  Navigator.push(context, MaterialPageRoute(builder:(context)=> MealPlanner()));
                 },
                 child: Text('Meal Planner', style: pixelButtonTextStyle),
               ),
@@ -131,6 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             ],
           ),
+
         ),
       ),
     );
