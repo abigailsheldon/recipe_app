@@ -26,6 +26,9 @@ MERGED from /Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/m
 INJECTED from /Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+MERGED from [:super_native_extensions] /Users/devonivory/MadProjects/Project_1/recipe_app/build/super_native_extensions/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
+MERGED from [:device_info_plus] /Users/devonivory/MadProjects/Project_1/recipe_app/build/device_info_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
+MERGED from [:irondash_engine_context] /Users/devonivory/MadProjects/Project_1/recipe_app/build/irondash_engine_context/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider_android] /Users/devonivory/MadProjects/Project_1/recipe_app/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:sqflite_android] /Users/devonivory/MadProjects/Project_1/recipe_app/build/sqflite_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.fragment:fragment:1.7.1] /Users/devonivory/.gradle/caches/8.10.2/transforms/55520e4df2220e27f13f0bbb7467d11a/transformed/fragment-1.7.1/AndroidManifest.xml:2:1-7:12
@@ -82,6 +85,12 @@ uses-sdk
 INJECTED from /Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/debug/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/debug/AndroidManifest.xml
 INJECTED from /Users/devonivory/MadProjects/Project_1/recipe_app/android/app/src/debug/AndroidManifest.xml
+MERGED from [:super_native_extensions] /Users/devonivory/MadProjects/Project_1/recipe_app/build/super_native_extensions/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:super_native_extensions] /Users/devonivory/MadProjects/Project_1/recipe_app/build/super_native_extensions/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:device_info_plus] /Users/devonivory/MadProjects/Project_1/recipe_app/build/device_info_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:device_info_plus] /Users/devonivory/MadProjects/Project_1/recipe_app/build/device_info_plus/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:irondash_engine_context] /Users/devonivory/MadProjects/Project_1/recipe_app/build/irondash_engine_context/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:irondash_engine_context] /Users/devonivory/MadProjects/Project_1/recipe_app/build/irondash_engine_context/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] /Users/devonivory/MadProjects/Project_1/recipe_app/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] /Users/devonivory/MadProjects/Project_1/recipe_app/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:sqflite_android] /Users/devonivory/MadProjects/Project_1/recipe_app/build/sqflite_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44

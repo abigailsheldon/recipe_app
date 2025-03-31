@@ -25,5 +25,8 @@ com.example.recipe.app-resValues-23 /Users/devonivory/MadProjects/Project_1/reci
 com.example.recipe.app-packageDebugResources-24 /Users/devonivory/MadProjects/Project_1/recipe_app/build/app/intermediates/incremental/debug/packageDebugResources/merged.dir
 com.example.recipe.app-packageDebugResources-25 /Users/devonivory/MadProjects/Project_1/recipe_app/build/app/intermediates/incremental/debug/packageDebugResources/stripped.dir
 com.example.recipe.app-debug-26 /Users/devonivory/MadProjects/Project_1/recipe_app/build/app/intermediates/merged_res/debug/mergeDebugResources
-com.example.recipe.app-debug-27 /Users/devonivory/MadProjects/Project_1/recipe_app/build/path_provider_android/intermediates/packaged_res/debug/packageDebugResources
-com.example.recipe.app-debug-28 /Users/devonivory/MadProjects/Project_1/recipe_app/build/sqflite_android/intermediates/packaged_res/debug/packageDebugResources
+com.example.recipe.app-debug-27 /Users/devonivory/MadProjects/Project_1/recipe_app/build/device_info_plus/intermediates/packaged_res/debug/packageDebugResources
+com.example.recipe.app-debug-28 /Users/devonivory/MadProjects/Project_1/recipe_app/build/irondash_engine_context/intermediates/packaged_res/debug/packageDebugResources
+com.example.recipe.app-debug-29 /Users/devonivory/MadProjects/Project_1/recipe_app/build/path_provider_android/intermediates/packaged_res/debug/packageDebugResources
+com.example.recipe.app-debug-30 /Users/devonivory/MadProjects/Project_1/recipe_app/build/sqflite_android/intermediates/packaged_res/debug/packageDebugResources
+com.example.recipe.app-debug-31 /Users/devonivory/MadProjects/Project_1/recipe_app/build/super_native_extensions/intermediates/packaged_res/debug/packageDebugResources

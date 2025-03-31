@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'db_helper.dart';
 import 'grocery_list.dart'; // Make sure this file is present
 
@@ -17,8 +18,9 @@ class RecipeDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Use the current timestamp if the recipe's date field is missing.
     final int dateValue =
-        recipe[DatabaseHelper.date] ?? DateTime.now().millisecondsSinceEpoch;
-    final DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
+        recipe[DatabaseHelper.date] ?? 0;
+     DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
+    String formatedDate =  dateValue == 0? "No date assigned":DateFormat('yyyy-MM-dd').format(recipeDate);
 
     return Scaffold(
       appBar: AppBar(title: Text(recipe[DatabaseHelper.columnName])),
@@ -43,7 +45,7 @@ class RecipeDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              "Date: ${recipeDate.toLocal()}",
+             recipe[DatabaseHelper.date] ==0 ?"Please go to planner to assign a date to ${recipe[DatabaseHelper.columnName]}": "Date: ${recipeDate}",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
