@@ -30,7 +30,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
   List<String> unchecked =[];
   List<String> checked=[];
   @override
-  void initState(){
+  void initState() {
     super.initState();
     final dbhelper = Provider.of<DatabaseHelper>(context, listen: false);
     _getAllRecipeData();
@@ -48,14 +48,14 @@ class _Recipe_Menu extends State<RecipeMenu>{
           if(!checked.contains(recipe)){
             favoriteStatus = 1;
             print("before getRecipeId call****");
-            _getRecipeId(recipe);//grab id of the recipe that was checked
+            await _getRecipeId(recipe);//grab id of the recipe that was checked
             print("After RecipeIdcall***");
             checked.add(recipe); //add selected recipe to checked list
             
             unchecked.remove(recipe); // remove checked recipe from unchecked recipe list
             // update the recipe in db to update favorite status for the selected recipe
             
-            _updateFavoriteRecipe(favoriteStatus);
+            await _updateFavoriteRecipe(favoriteStatus);
 
           }
           }else{
@@ -68,8 +68,8 @@ class _Recipe_Menu extends State<RecipeMenu>{
 
                 favoriteStatus = 0;
               print("before getRecipeId call**** unchecked");
-              _getRecipeId(recipe);
-              _updateFavoriteRecipe(favoriteStatus);
+              await _getRecipeId(recipe);
+             await _updateFavoriteRecipe(favoriteStatus);
               print("After RecipeIdcall*** unchecked");
 
               checked.remove(recipe);
@@ -144,7 +144,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
 
     );
   }
- void _getAllRecipeData() async{
+ Future<void> _getAllRecipeData() async{
   // int count =  await dbHelper.numberOfRecipeName();
     List<Map<String,dynamic>> allNames = await dbHelper.allRecipeNames();
 
@@ -158,7 +158,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
        print("*****recipe count from db **********: ${recipeNames.length}");
        print("Recipes: $recipeNames");
   }
-  void _getRecipeId(String recipe) async{
+  Future<void> _getRecipeId(String recipe) async{
     int? _id = await dbHelper.getRecipteNameById(recipe);
     setState(() {
       recipeId = _id;
@@ -167,7 +167,7 @@ class _Recipe_Menu extends State<RecipeMenu>{
     });
     
   }
-  void _updateFavoriteRecipe(int _status) async{
+  Future<void> _updateFavoriteRecipe(int _status) async{
     Map<String,dynamic> row = {
               DatabaseHelper.columnId: recipeId,
               DatabaseHelper.columnFavorite: favoriteStatus
