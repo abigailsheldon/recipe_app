@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'db_helper.dart';
 import 'favorite_menu.dart';
+
+import 'package:recipe/meal_planner.dart';
+
 import 'grocery_list_model.dart';
 import 'collected_grocery_list.dart';
 import 'recipe_menu.dart';
 import 'styles.dart';
+
 
 final dbHelper = DatabaseHelper();
 
@@ -59,6 +63,52 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: const Color(0xFF000080),
       ),
       body: Center(
+
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RecipeMenu()),
+                    );
+                  },
+                  child: const Text(
+                    'Recipe',
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                ),
+                
+                ElevatedButton(
+                  onPressed: () {
+                    // Add functionality for Meal Planner here.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MealPlanner()),
+                    );
+                  },
+                  child: const Text(
+                    'Meal Planner',
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Add functionality for Grocery List here.
+                  },
+                  child: const Text(
+                    'Grocery List',
+                    style: TextStyle(color: Colors.blueAccent),
+                  ),
+                ),
+              ],
+            ),
+          ],
+
         child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
@@ -116,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
+
         ),
       ),
     );

@@ -50,6 +50,24 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "device_info_plus",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/device_info_plus-10.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "device_info_plus_platform_interface",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/device_info_plus_platform_interface-7.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "dotted_border",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/dotted_border-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "equatable",
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/equatable-2.0.7",
       "packageUri": "lib/",
@@ -74,6 +92,18 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "file",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/file-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "fixnum",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/fixnum-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///Users/devonivory/example-project/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -90,6 +120,30 @@
       "rootUri": "file:///Users/devonivory/example-project/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.7"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///Users/devonivory/example-project/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/intl-0.20.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "irondash_engine_context",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/irondash_engine_context-0.5.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "irondash_message_channel",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/irondash_message_channel-0.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "leak_tracker",
@@ -152,6 +206,18 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "path_drawing",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/path_drawing-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_parsing",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/path_parsing-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "path_provider",
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/path_provider-2.1.5",
       "packageUri": "lib/",
@@ -194,6 +260,12 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "pixel_snap",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/pixel_snap-0.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "platform",
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/platform-3.1.6",
       "packageUri": "lib/",
@@ -212,6 +284,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "simple_gesture_detector",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/simple_gesture_detector-0.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/devonivory/example-project/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -222,6 +300,12 @@
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/source_span-1.10.1",
       "packageUri": "lib/",
       "languageVersion": "3.1"
+    },
+    {
+      "name": "sprintf",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/sprintf-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "sqflite",
@@ -272,10 +356,34 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "super_clipboard",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/super_clipboard-0.8.24",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "super_drag_and_drop",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/super_drag_and_drop-0.8.24",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "super_native_extensions",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/super_native_extensions-0.8.24",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "synchronized",
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/synchronized-3.3.1",
       "packageUri": "lib/",
       "languageVersion": "3.7"
+    },
+    {
+      "name": "table_calendar",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/table_calendar-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "term_glyph",
@@ -296,6 +404,12 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "uuid",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/uuid-4.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -306,6 +420,24 @@
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/vm_service-14.3.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
+    },
+    {
+      "name": "web",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/web-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "win32",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/win32-5.12.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "win32_registry",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/win32_registry-1.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "xdg_directories",
@@ -326,7 +458,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-03-28T23:27:06.596793Z",
+  "generated": "2025-03-31T04:42:30.895784Z",
   "generator": "pub",
   "generatorVersion": "3.7.0",
   "flutterRoot": "file:///Users/devonivory/example-project/flutter",

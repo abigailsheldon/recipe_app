@@ -29,6 +29,8 @@ class _RecipeMenuState extends State<RecipeMenu> {
   List<Map<String, dynamic>> recipeNames = [];
   // Map to track the favorite selection status for each recipe.
   Map<String, bool> favoriteSelectedRecipe = {};
+  late int? recipeId = 0;
+
   
   // Selected category filter; null means no filter.
   String? selectedCategory;
@@ -38,6 +40,47 @@ class _RecipeMenuState extends State<RecipeMenu> {
     super.initState();
     _getAllRecipeData();
   }
+
+  void _favoritSelection(String recipe, bool? value) async{
+      setState(()  async {
+        favoriteSelectedRecipe[recipe] = value ?? false;
+        if(value == true){
+          if(!checked.contains(recipe)){
+            favoriteStatus = 1;
+            print("before getRecipeId call****");
+            await _getRecipeId(recipe);//grab id of the recipe that was checked
+            print("After RecipeIdcall***");
+            checked.add(recipe); //add selected recipe to checked list
+            
+            unchecked.remove(recipe); // remove checked recipe from unchecked recipe list
+            // update the recipe in db to update favorite status for the selected recipe
+            
+            await _updateFavoriteRecipe(favoriteStatus);
+
+          }
+          }else{
+            if(!unchecked.contains(recipe)){
+              print("check****");
+              unchecked.add(recipe);
+              // update recipe favorite status
+            
+                
+
+                favoriteStatus = 0;
+              print("before getRecipeId call**** unchecked");
+              await _getRecipeId(recipe);
+             await _updateFavoriteRecipe(favoriteStatus);
+              print("After RecipeIdcall*** unchecked");
+
+              checked.remove(recipe);
+            }
+          }
+
+        
+        
+      });
+
+
 
   // Helper function to parse categories from a comma-separated string.
   List<String> parseCategories(String categoryString) {
@@ -208,51 +251,51 @@ class _RecipeMenuState extends State<RecipeMenu> {
     );
   }
 
+ Future<void> _getAllRecipeData() async{
+  // int count =  await dbHelper.numberOfRecipeName();
+    List<Map<String,dynamic>> allNames = await dbHelper.allRecipeNames();
+
+  setState(() {
+    
+    //recipeNumber = count;
+    recipeNames = allNames;
+  });
+      
+     
+       print("*****recipe count from db **********: ${recipeNames.length}");
+       print("Recipes: $recipeNames");
+  }
+  Future<void> _getRecipeId(String recipe) async{
+    int? _id = await dbHelper.getRecipteNameById(recipe);
+     setState(() {
+      recipeId = _id;
+
+      
+    });
+
+
   /* 
    * _getAllRecipeData:
    * Retrieves all recipes from the database using DatabaseHelper.allRecipeNames().
    * Updates the local recipeNames list and initializes the favoriteSelectedRecipe map
    * based on the stored favorite value (1 means true).
    */
-  void _getAllRecipeData() async {
-    final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-    List<Map<String, dynamic>> allRecipes = await dbHelper.allRecipeNames();
-    setState(() {
-      recipeNames = allRecipes;
-      for (var recipe in recipeNames) {
-        String name = recipe[DatabaseHelper.columnName];
-        favoriteSelectedRecipe[name] =
-            recipe[DatabaseHelper.columnFavorite] == 1;
-      }
-    });
+  
   }
 
-  /* 
-   * _favoriteSelection:
-   * Handles toggling a recipe's favorite status when the heart icon is tapped.
-   */
-  void _favoriteSelection(String recipe, bool? value) async {
-    final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-    setState(() {
-      favoriteSelectedRecipe[recipe] = value ?? false;
-    });
-    int newFavoriteStatus = (value == true) ? 1 : 0;
-    int? recId = await _getRecipeId(recipe);
-    if (recId != null) {
-      Map<String, dynamic> row = {
-        DatabaseHelper.columnId: recId,
-        DatabaseHelper.columnFavorite: newFavoriteStatus,
-      };
-      await dbHelper.updateFavoriteStatus(row);
-    }
+  Future<void> _updateFavoriteRecipe(int _status) async{
+    Map<String,dynamic> row = {
+              DatabaseHelper.columnId: recipeId,
+              DatabaseHelper.columnFavorite: favoriteStatus
+            };
+            final updatedRows =await dbHelper.updateFavoriteStatus(row);
+            print("Updated $updatedRows row(s****)");
+
   }
 
   /* 
    * _getRecipeId:
    * Retrieves the database ID for a given recipe name using DatabaseHelper.getRecipteNameById.
    */
-  Future<int?> _getRecipeId(String recipe) async {
-    final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-    return await dbHelper.getRecipteNameById(recipe);
-  }
+ 
 }
