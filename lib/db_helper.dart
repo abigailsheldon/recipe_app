@@ -3,6 +3,10 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:excel/excel.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
 class DatabaseHelper{
 
   static const _databaseName = "MyDatabase.db";
@@ -157,6 +161,7 @@ class DatabaseHelper{
 
 
 
+
 Future<void> printDatabaseStructure() async {
   if (_db == null) {
       print("Database is not initialized.");
@@ -295,7 +300,24 @@ print("Recipe Names: $testQuery");
   }
   
   
+    /* Exports favorited recipes to a JSON file stored locally. */
+  Future<File> downloadFavoriteRecipes() async {
+    // Query the database for recipes marked as favorites.
+    List<Map<String, dynamic>> favorites = await _db.query(
+      table,
+      where: '$columnFavorite = ?',
+      whereArgs: [1],
+    );
+    // Convert the list of favorite recipes to JSON.
+    String jsonFavorites = jsonEncode(favorites);
 
+    // Get the application's document directory.
+    Directory directory = await getApplicationDocumentsDirectory();
+    String filePath = join(directory.path, 'favorite_recipes.json');
+    File file = File(filePath);
 
+    // Write the JSON data to the file.
+    return await file.writeAsString(jsonFavorites);
+  }
 
 }
