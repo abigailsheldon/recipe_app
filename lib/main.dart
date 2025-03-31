@@ -1,16 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'db_helper.dart';
 import 'favorite_menu.dart';
-
-import 'package:recipe/meal_planner.dart';
-
+import 'meal_planner.dart';
 import 'grocery_list_model.dart';
 import 'collected_grocery_list.dart';
 import 'recipe_menu.dart';
 import 'styles.dart';
-import 'dart:io';
-
 
 final dbHelper = DatabaseHelper();
 
@@ -62,16 +59,15 @@ class _MyHomePageState extends State<MyHomePage> {
           style: pixelTitleTextStyle.copyWith(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF0078D7),
-
       ),
       body: Center(
-
-                child: Padding(
-          padding: const EdgeInsets.all(32.0),
+        child: Padding(
+          padding: const EdgeInsets.all(85.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              // Navigate to Recipe Menu Page
+              
+              // Navigation buttons (positioned at the top)
               ElevatedButton(
                 style: pixelButtonStyle,
                 onPressed: () {
@@ -83,62 +79,76 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('Recipe', style: pixelButtonTextStyle),
               ),
               const SizedBox(height: 16),
-              // Placeholder for future Meal Planner feature
               ElevatedButton(
                 style: pixelButtonStyle,
                 onPressed: () {
-                  // Add functionality for Meal Planner here.
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=> MealPlanner()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MealPlanner()));
                 },
                 child: Text('Meal Planner', style: pixelButtonTextStyle),
               ),
               const SizedBox(height: 16),
-              // Navigate to Collected Grocery List Page
               ElevatedButton(
                 style: pixelButtonStyle,
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const CollectedGroceryListPage()),
+                    MaterialPageRoute(builder: (context) => const CollectedGroceryListPage()),
                   );
                 },
                 child: Text('Grocery List', style: pixelButtonTextStyle),
               ),
               const SizedBox(height: 16),
-              // Navigate to Favorites Page
               ElevatedButton(
                 style: pixelButtonStyle,
                 onPressed: () async {
-                  final dbHelper =
-                      Provider.of<DatabaseHelper>(context, listen: false);
+                  final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
                   List<String> favs = await dbHelper.getFavoriteRecipeNames();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FavoriteMenu(recipe_Name: favs),
+                      builder: (context) => FavoriteMenu(),
                     ),
                   );
                 },
                 child: Text('Favorite Recipes', style: pixelButtonTextStyle),
               ),
-              // Button to download favorited recipes
-              ElevatedButton(
-                style: pixelButtonStyle,
-                onPressed: () async {
-                  final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-                  File file = await dbHelper.downloadFavoriteRecipes();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Favorite recipes downloaded to: ${file.path}")),
-                  );
-                },
-                child: Text('Download Favorite Recipes', style: pixelButtonTextStyle),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 150), // Extra spacing before download buttons
 
+              // Row containing the download buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: pixelButtonStyle,
+                      onPressed: () async {
+                        final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
+                        File file = await dbHelper.downloadFavoriteRecipes();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Favorite recipes downloaded to: ${file.path}")),
+                        );
+                      },
+                      child: Text('Download Favorite Recipes', style: pixelButtonTextStyle),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: pixelButtonStyle,
+                      onPressed: () async {
+                        final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
+                        File file = await dbHelper.downloadMealPlannerData();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Meal planner data downloaded to: ${file.path}")),
+                        );
+                      },
+                      child: Text('Download Meal Planner', style: pixelButtonTextStyle),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
-
         ),
       ),
     );

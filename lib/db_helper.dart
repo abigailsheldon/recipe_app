@@ -5,7 +5,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:excel/excel.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper{
 
@@ -20,8 +19,7 @@ class DatabaseHelper{
   static const groceryList = 'grocery_List';
   static const description= 'description';
   late Database _db;
-  //  * - Prints the database structure.
-  //  */
+
   Future<Database> init() async {
     final directory = await getApplicationDocumentsDirectory();
     final path = join(directory.path, _databaseName);
@@ -31,15 +29,11 @@ class DatabaseHelper{
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
-
     // Wipe the database each time
     await resetDatabase();
-
     // Load the Excel file and populate the database
     await loadAndStoreRecipes();
-    
    return _db;
-
   }
 
   Future _onCreate (Database db, int version ) async{
@@ -72,20 +66,19 @@ class DatabaseHelper{
 
   for (var sheet in excel.tables.keys) {
     var rows = excel.tables[sheet]!.rows; // This is a single worksheet object
-
     if (rows.isEmpty) {
       print("No data found in sheet: $sheet");
       continue;
     }
 
-    // Step 1: Find first non-empty row to use as column headers
-    Map<int, String> headerIndexToColumnName = {};//take in the index of each column in the header 
-    int headerRowIndex = -1;
+    // Find first non-empty row to use as column headers
+    Map<int, String> headerIndexToColumnName = {}; // Take in the index of each column in the header 
+    int headerRowIndex = -1; 
 
     for (int i = 0; i < rows.length; i++) {
       var row = rows[i];
-      if (row.isNotEmpty && row.any((cell) => cell?.value != null)) { //checking to see if current row is not empty and checking each cell in the row to see if any cell isn't null
-        headerRowIndex = i; // marks the header index
+      if (row.isNotEmpty && row.any((cell) => cell?.value != null)) { // Checking to see if current row is not empty and checking each cell in the row to see if any cell isn't null
+        headerRowIndex = i; // Marks the header index
         for (int j = 0; j < row.length; j++) {
           String columnName = row[j]?.value.toString().trim() ?? '';
           if (columnName.isNotEmpty) {
@@ -102,7 +95,7 @@ class DatabaseHelper{
       return [];
     }
 
-    // Step 2: Read Data Rows (skip header row)
+    // Read Data Rows (skip header row)
     for (int i = headerRowIndex + 1; i < rows.length; i++) {
       var row = rows[i];
       if (row.isEmpty || row.every((cell) => cell?.value == null)) {
@@ -137,7 +130,6 @@ class DatabaseHelper{
       if(_groceryList.isNotEmpty){
          rowData["Grocery List"] = _groceryList.trim();
       }
-
       print("Parsed Row Data: $rowData");
 
       // Create the properly formatted recipe object with defaults
@@ -154,20 +146,14 @@ class DatabaseHelper{
       _excelData.add(recipeToInsert);
     }
   }
-
   return _excelData;
 }
-
-
-
-
 
 Future<void> printDatabaseStructure() async {
   if (_db == null) {
       print("Database is not initialized.");
       return;
     }
-
   // Get the table structure
   List<Map<String, dynamic>> tableInfo = await _db.rawQuery("PRAGMA table_info($table);");
 
@@ -176,10 +162,10 @@ Future<void> printDatabaseStructure() async {
     print(column);
   }
 }
-// Check if recipe has been inserted already 
+
+/* Check if recipe has been inserted already */
 Future<bool> doesRecipeExist(Map<String, dynamic> recipe) async {
-  
-  
+
   final columnValue = recipe[columnName];
   final categorValue = recipe[columnCateagory];
   final decriptionValue = recipe[description];
@@ -203,40 +189,29 @@ Future<bool> doesRecipeExist(Map<String, dynamic> recipe) async {
       decriptionValue,
     ],
   );
-
   print("Query Result: $isduplicate");
 
   if (isduplicate.isNotEmpty) {
     print("Recipe already exists: $columnValue");
     return true;
   }
-
   print("No duplicate found.");
-  
   return false;
 }
 
+/* Delete all the records in the table */
 Future<void> resetDatabase() async {
-  // Delete all the records in the table
   await _db.delete(table);
-
   print("Database reset successfully.");
 }
 
-
-// Updates the favorite column in db
+/* Updates the favorite column in db */
 Future<int> updateFavoriteStatus(Map<String,dynamic> row) async {
     int id = row[columnId];
-    
-    // for(var singrow in test){
-    //   print("status query: ${singrow[columnId]}***");
     int result = await _db.update(table, row,where: '$columnId = ?', whereArgs: [id]);
     List<Map<String,dynamic>> test = await _db.query(table,columns: [columnFavorite],where: '$columnId = ?', whereArgs:[id] );
-    print("testing query to see favorite status : $test****");
+    print("Testing query to see favorite status : $test****");
     return result;
-
-
-
 }
 
 /* 
@@ -254,7 +229,7 @@ Future<List<String>> getFavoriteRecipeNames() async {
 }
 
 
-// Gets recipe id 
+// Gets recipe ID 
 Future<int?> getRecipteNameById (String _recipeName) async{
   List<Map<String,dynamic>> id = await _db.query(table,columns: [columnId] ,where: '$columnName = ?', whereArgs: [_recipeName]);
   print("this is the id number for  $_recipeName *** :   ${id.first[columnId] as int}");
@@ -294,7 +269,7 @@ Future<int?> getRecipteNameById (String _recipeName) async{
      List<Map<String,dynamic>> result = await _db.query(table);
      print("this is the allrecipenames query $result");
      List<Map<String, dynamic>> testQuery = await _db.rawQuery('SELECT recipe_name FROM $table');
-print("Recipe Names: $testQuery");
+     print("Recipe Names: $testQuery");
 
     return result;
   }
@@ -318,6 +293,30 @@ print("Recipe Names: $testQuery");
 
     // Write the JSON data to the file.
     return await file.writeAsString(jsonFavorites);
+  }
+
+  /* Exports meal planner data to a JSON file stored locally.
+  * Queries for recipes whose 'date' field is non-zero,
+  * converts the data to JSON, and writes it to a file.
+  */
+  Future<File> downloadMealPlannerData() async {
+    // Query for recipes with a non-zero date (indicating a meal plan assignment)
+    List<Map<String, dynamic>> mealPlannerData = await _db.query(
+      table,
+      where: '$date != ?',
+      whereArgs: [0],
+    );
+    // Convert the list to JSON format.
+    String jsonData = jsonEncode(mealPlannerData);
+
+    // Get the application documents directory.
+    Directory directory = await getApplicationDocumentsDirectory();
+    // Build a file path; you can adjust the filename as needed.
+    String filePath = join(directory.path, 'meal_planner_data.json');
+    File file = File(filePath);
+
+    // Write the JSON data to the file and return the file.
+    return await file.writeAsString(jsonData);
   }
 
 }

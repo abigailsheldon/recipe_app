@@ -10,16 +10,21 @@ import 'styles.dart';
  * Displays a list of favorite recipe names using consistent pixel-art styling.
  * If no favorites exist, a message is shown using the pixel font.
  * When a recipe title is tapped, the app navigates to the recipe's details page.
+ * 
+ * Updated to persist favorites by re-fetching them from the database.
  */
 class FavoriteMenu extends StatefulWidget {
-  final List<String> recipe_Name;
-  const FavoriteMenu({super.key, required this.recipe_Name});
+  // Removed the passed-in recipe list to allow fetching fresh data.
+  const FavoriteMenu({super.key});
 
   @override
   _FavoriteMenuState createState() => _FavoriteMenuState();
 }
 
 class _FavoriteMenuState extends State<FavoriteMenu> {
+  // Local state variable to store favorite recipe names.
+  List<String> _favorites = [];
+
   // Define a common pixel-art decoration for list items.
   final BoxDecoration pixelDecoration = BoxDecoration(
     color: Colors.white,
@@ -28,12 +33,27 @@ class _FavoriteMenuState extends State<FavoriteMenu> {
   );
 
   @override
+  void initState() {
+    super.initState();
+    _refreshFavorites();
+  }
+
+  /// Retrieves the favorite recipe names from the database and updates local state.
+  Future<void> _refreshFavorites() async {
+    final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
+    List<String> favs = await dbHelper.getFavoriteRecipeNames();
+    setState(() {
+      _favorites = favs;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Favorite Menu", style: pixelTitleTextStyle),
       ),
-      body: widget.recipe_Name.isEmpty
+      body: _favorites.isEmpty
           ? const Center(
               child: Text(
                 "No favorites selected",
@@ -41,9 +61,9 @@ class _FavoriteMenuState extends State<FavoriteMenu> {
               ),
             )
           : ListView.builder(
-              itemCount: widget.recipe_Name.length,
+              itemCount: _favorites.length,
               itemBuilder: (context, index) {
-                final String recipeTitle = widget.recipe_Name[index];
+                final String recipeTitle = _favorites[index];
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -66,9 +86,11 @@ class _FavoriteMenuState extends State<FavoriteMenu> {
                           MaterialPageRoute(
                               builder: (context) =>
                                   RecipeDetailPage(recipe: recipe)),
-                        );
+                        ).then((_) {
+                          // Optionally, refresh the favorites when returning.
+                          _refreshFavorites();
+                        });
                       } catch (e) {
-                        // Handle the case when the recipe is not found.
                         debugPrint("Recipe not found: $recipeTitle");
                       }
                     },

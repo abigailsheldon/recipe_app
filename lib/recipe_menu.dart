@@ -20,9 +20,9 @@ class RecipeMenu extends StatefulWidget {
 class _Recipe_Menu extends State<RecipeMenu>{
   late int recipeNumber = 0 ;
   late int? recipeId = 0;
-  //favorite recipe status
+  // Favorite recipe status
   late int favoriteStatus = 0;
-  //favoriteRecipe
+  // FavoriteRecipe
   Map<String,bool> favoriteSelectedRecipe= {};
   // late DatabaseHelper db_helper;
   List<Map<String,dynamic>> recipeNames = [];
@@ -38,8 +38,6 @@ class _Recipe_Menu extends State<RecipeMenu>{
     for(var _recipe in List.from(recipeNames)){
         favoriteSelectedRecipe[_recipe] = false;
     }
-  
-
   }
   void _favoritSelection(String recipe, bool? value) async{
       setState(()  async {
@@ -48,12 +46,12 @@ class _Recipe_Menu extends State<RecipeMenu>{
           if(!checked.contains(recipe)){
             favoriteStatus = 1;
             print("before getRecipeId call****");
-            await _getRecipeId(recipe);//grab id of the recipe that was checked
+            await _getRecipeId(recipe);// Grab id of the recipe that was checked
             print("After RecipeIdcall***");
-            checked.add(recipe); //add selected recipe to checked list
+            checked.add(recipe); // Add selected recipe to checked list
             
-            unchecked.remove(recipe); // remove checked recipe from unchecked recipe list
-            // update the recipe in db to update favorite status for the selected recipe
+            unchecked.remove(recipe); // Remove checked recipe from unchecked recipe list
+            // Update the recipe in db to update favorite status for the selected recipe
             
             await _updateFavoriteRecipe(favoriteStatus);
 
@@ -62,40 +60,30 @@ class _Recipe_Menu extends State<RecipeMenu>{
             if(!unchecked.contains(recipe)){
               print("check****");
               unchecked.add(recipe);
-              // update recipe favorite status
-            
-                
-
+              // Update recipe favorite status
                 favoriteStatus = 0;
               print("before getRecipeId call**** unchecked");
               await _getRecipeId(recipe);
-             await _updateFavoriteRecipe(favoriteStatus);
+              await _updateFavoriteRecipe(favoriteStatus);
               print("After RecipeIdcall*** unchecked");
-
               checked.remove(recipe);
             }
           }
-
-        
-        
       });
 
   }
   
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold (
       appBar: AppBar(title: const Text ("Recipes")),
       body: recipeNames.isEmpty
         ?const Center(child: CircularProgressIndicator()):
       Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(child: 
            ListView.builder(
           
-        
       itemCount: recipeNames.length,
       itemBuilder: (context,index){
         String name = recipeNames[index][DatabaseHelper.columnName];
@@ -103,16 +91,12 @@ class _Recipe_Menu extends State<RecipeMenu>{
           leading: Checkbox(
               value: favoriteSelectedRecipe[name] ??false , 
               onChanged: (bool?value){
-                //method to handle selected checkbox
+                // Method to handle selected checkbox
                 _favoritSelection(name, value);
-                
-
                }
           ),
           title: ElevatedButton(
-          
           onPressed: (){
-
         }, 
           child: Text(name, 
                       style: TextStyle(color: Colors.blueAccent))
@@ -122,7 +106,6 @@ class _Recipe_Menu extends State<RecipeMenu>{
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => RecipeDetailPage(recipe: recipeNames[index])));
-
           }, child: Text("Recipe Description")),
         );
           
@@ -131,42 +114,34 @@ class _Recipe_Menu extends State<RecipeMenu>{
           child: ElevatedButton(onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FavoriteMenu(recipe_Name: checked),)
+              MaterialPageRoute(builder: (context) => FavoriteMenu(),)
             );
           }, child: Text("view favorite list")),)
-        
         ]
-       
       ),
-        
-      
-      
 
     );
   }
- Future<void> _getAllRecipeData() async{
+ 
+  Future<void> _getAllRecipeData() async{
   // int count =  await dbHelper.numberOfRecipeName();
     List<Map<String,dynamic>> allNames = await dbHelper.allRecipeNames();
-
-  setState(() {
-    
+    setState(() {
     //recipeNumber = count;
     recipeNames = allNames;
   });
-      
      
        print("*****recipe count from db **********: ${recipeNames.length}");
        print("Recipes: $recipeNames");
   }
+
   Future<void> _getRecipeId(String recipe) async{
     int? _id = await dbHelper.getRecipteNameById(recipe);
     setState(() {
       recipeId = _id;
-
-      
     });
-    
   }
+
   Future<void> _updateFavoriteRecipe(int _status) async{
     Map<String,dynamic> row = {
               DatabaseHelper.columnId: recipeId,
@@ -175,9 +150,10 @@ class _Recipe_Menu extends State<RecipeMenu>{
             final updatedRows =await dbHelper.updateFavoriteStatus(row);
             print("Updated $updatedRows row(s****)");
   }
+
   // void _getAllRecipes () async{
   //   await db_helper.allRecipeNames();
   //   print(await db_helper.allRecipeNames());
-
   // }
+  
 }

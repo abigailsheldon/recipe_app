@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'db_helper.dart';
 import 'grocery_list.dart';
 import 'styles.dart';
-import 'pixel_recipe_card.dart'; // If you wish to wrap some parts in a pixel card
 
 /*
  * RecipeDetailPage
@@ -11,6 +10,7 @@ import 'pixel_recipe_card.dart'; // If you wish to wrap some parts in a pixel ca
  * Displays full details for a recipe (category, grocery list, description, date).
  * Includes a button to navigate to GroceryListPage.
  */
+
 class RecipeDetailPage extends StatelessWidget {
   final Map<String, dynamic> recipe;
   const RecipeDetailPage({Key? key, required this.recipe}) : super(key: key);
@@ -23,7 +23,6 @@ class RecipeDetailPage extends StatelessWidget {
      DateTime recipeDate = DateTime.fromMillisecondsSinceEpoch(dateValue);
     String formatedDate =  dateValue == 0? "No date assigned":DateFormat('yyyy-MM-dd').format(recipeDate);
 
-    // Instead of defining styles here, we could move the decoration to styles.dart.
     final BoxDecoration pixelDecoration = BoxDecoration(
       color: Colors.white,
       border: Border.all(color: Colors.black, width: 2),
@@ -39,6 +38,7 @@ class RecipeDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            
             // Recipe Title using shared pixel style.
             Container(
               width: double.infinity,
@@ -51,6 +51,7 @@ class RecipeDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            
             // Recipe Category
             Container(
               padding: const EdgeInsets.all(12),
@@ -61,6 +62,7 @@ class RecipeDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            
             // Grocery List
             Container(
               padding: const EdgeInsets.all(12),
@@ -71,6 +73,7 @@ class RecipeDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            
             // Recipe Description
             Container(
               padding: const EdgeInsets.all(12),
@@ -88,6 +91,7 @@ class RecipeDetailPage extends StatelessWidget {
 
             ),
             const SizedBox(height: 24),
+            
             // Button to view Grocery List for the recipe.
             Center(
               child: ElevatedButton(

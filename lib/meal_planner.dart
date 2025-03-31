@@ -35,9 +35,7 @@ class _MealPlannerState extends State<MealPlanner> {
         checked.remove(recipe);
       }
     });
-    
   }
-
 
   void _clearSelection() {
   setState(() {
@@ -45,7 +43,6 @@ class _MealPlannerState extends State<MealPlanner> {
     favoriteSelectedRecipe.clear();
   });
 }
-
 
   void _getAllRecipeData() async {
     final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
@@ -74,9 +71,9 @@ class _MealPlannerState extends State<MealPlanner> {
     final updatedRows = await dbHelper.updateFavoriteStatus(row);
     print("Updated $updatedRows row(s)");
   }
+
   Future<void> _submit_Meal_Planner_Days()async{
-    //get the selected day 
-    //and the checked recipes
+    // Get the selected day and checked recipes
     if(checked.isNotEmpty){
         for(var checked_recipe in checked){
           await _getRecipeId(checked_recipe);
@@ -86,11 +83,9 @@ class _MealPlannerState extends State<MealPlanner> {
           content: Text(
               'Assigned $checked_recipe to  $_selectedDay'),
         ),
-      );
-
+        );
         }
-        _clearSelection();
-        
+        _clearSelection(); 
     }
   }
 
@@ -103,46 +98,44 @@ class _MealPlannerState extends State<MealPlanner> {
       ),
       body: Column(
         children: [
- Expanded(
-  child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TableCalendar(
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) {
-                return isSameDay(_selectedDay, day);
-              },
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = DateTime(selectedDay.year,selectedDay.month,selectedDay.day);
-                  _focusedDay = focusedDay;
-                });
-              },
-              calendarFormat: _calendarFormat,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-            ),
-            Text(
-              "Meals for ${_selectedDay.toLocal()}",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            Wrap(
-              children: mealPlan[_selectedDay]?.map((recipe) {
-                    return Chip(label: Text(recipe));
-                  }).toList() ??
-                  [],
-            ),
-            
-          ],
-        ),
-      )
-),
-
+          Expanded(
+            child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TableCalendar(
+                        firstDay: DateTime.utc(2010, 10, 16),
+                        lastDay: DateTime.utc(2030, 3, 14),
+                        focusedDay: _focusedDay,
+                        selectedDayPredicate: (day) {
+                          return isSameDay(_selectedDay, day);
+                        },
+                        onDaySelected: (selectedDay, focusedDay) {
+                          setState(() {
+                            _selectedDay = DateTime(selectedDay.year,selectedDay.month,selectedDay.day);
+                            _focusedDay = focusedDay;
+                          });
+                        },
+                        calendarFormat: _calendarFormat,
+                        onFormatChanged: (format) {
+                          setState(() {
+                            _calendarFormat = format;
+                          });
+                        },
+                      ),
+                      Text(
+                        "Meals for ${_selectedDay.toLocal()}",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Wrap(
+                        children: mealPlan[_selectedDay]?.map((recipe) {
+                              return Chip(label: Text(recipe));
+                            }).toList() ??
+                            [],
+                      ),
+                    ],
+                  ),
+                )
+          ),
 
           Expanded(
             child: ListView.builder(
@@ -163,6 +156,7 @@ class _MealPlannerState extends State<MealPlanner> {
               },
             ),
           ),
+          
           Row(
               children: [
                 ElevatedButton(onPressed: (){
@@ -172,7 +166,6 @@ class _MealPlannerState extends State<MealPlanner> {
               ],
             )
         ],
-        
       ),
     );
   }

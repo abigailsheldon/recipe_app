@@ -9,6 +9,7 @@ import 'styles.dart';
  * Displays an accumulated grocery list with pixel-art style.
  * It listens to GroceryListModel and shows all ingredients that have been added.
  */
+
 class CollectedGroceryListPage extends StatelessWidget {
   const CollectedGroceryListPage({Key? key}) : super(key: key);
 
