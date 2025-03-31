@@ -64,52 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const RecipeMenu()),
-                    );
-                  },
-                  child: const Text(
-                    'Recipe',
-                    style: TextStyle(color: Colors.blueAccent),
-                  ),
-                ),
-                
-                ElevatedButton(
-                  onPressed: () {
-                    // Add functionality for Meal Planner here.
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MealPlanner()),
-                    );
-                  },
-                  child: const Text(
-                    'Meal Planner',
-                    style: TextStyle(color: Colors.blueAccent),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add functionality for Grocery List here.
-                  },
-                  child: const Text(
-                    'Grocery List',
-                    style: TextStyle(color: Colors.blueAccent),
-                  ),
-                ),
-              ],
-            ),
-          ],
-
-        child: Padding(
+                child: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -131,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: pixelButtonStyle,
                 onPressed: () {
                   // Add functionality for Meal Planner here.
+                  Navigator.push(context, MaterialPageRoute(builder:(context)=> MealPlanner()));
                 },
                 child: Text('Meal Planner', style: pixelButtonTextStyle),
               ),

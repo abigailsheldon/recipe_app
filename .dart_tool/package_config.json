@@ -326,6 +326,12 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "sqflite_common_ffi",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/sqflite_common_ffi-2.3.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
       "name": "sqflite_darwin",
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/sqflite_darwin-2.4.2",
       "packageUri": "lib/",
@@ -334,6 +340,12 @@
     {
       "name": "sqflite_platform_interface",
       "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/sqflite_platform_interface-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "sqlite3",
+      "rootUri": "file:///Users/devonivory/.pub-cache/hosted/pub.dev/sqlite3-2.7.5",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -458,7 +470,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-03-31T04:42:30.895784Z",
+  "generated": "2025-03-31T15:46:01.791513Z",
   "generator": "pub",
   "generatorVersion": "3.7.0",
   "flutterRoot": "file:///Users/devonivory/example-project/flutter",
