@@ -67,7 +67,6 @@ class _MealPlannerState extends State<MealPlanner> {
 
   Future<void> _updateRecipeDate(DateTime _status) async {
     final dbHelper = Provider.of<DatabaseHelper>(context, listen: false);
-    
     Map<String, dynamic> row = {
       DatabaseHelper.columnId: recipeId,
       DatabaseHelper.date: _status.millisecondsSinceEpoch
@@ -105,32 +104,7 @@ class _MealPlannerState extends State<MealPlanner> {
       body: Column(
         children: [
  Expanded(
-  child: DragTarget<Map<String, dynamic>>(
-    onAcceptWithDetails: (details) {
-      setState(() {
-        List<String> draggedRecipes = List<String>.from(details.data["recipe"]);
-
-        if (mealPlan[_selectedDay] == null) {
-          mealPlan[_selectedDay] = draggedRecipes;
-        } else {
-          mealPlan[_selectedDay]!.addAll(draggedRecipes);
-        }
-
-        for (var recipe in draggedRecipes) {
-          _getRecipeId(recipe);
-          _updateRecipeDate(_selectedDay);
-        }
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Assigned recipes ${details.data["recipe"]} to $_selectedDay'),
-        ),
-      );
-    },
-    builder: (context, candidateData, rejectedData) {
-      return SingleChildScrollView(
+  child: SingleChildScrollView(
         child: Column(
           children: [
             TableCalendar(
@@ -166,9 +140,7 @@ class _MealPlannerState extends State<MealPlanner> {
             
           ],
         ),
-      );
-    },
-  ),
+      )
 ),
 
 
@@ -179,34 +151,7 @@ class _MealPlannerState extends State<MealPlanner> {
                 String name = recipeNames[index][DatabaseHelper.columnName];
                 bool value = favoriteSelectedRecipe[name] ?? false;
 
-                return LongPressDraggable<Map<String, dynamic>>(
-                  data: {'recipe': checked.isNotEmpty ? checked : [name]},
-                  feedback: Material(
-                    color: Colors.black,
-                    child: Column(
-                      children: checked.isNotEmpty
-                          ? checked.map((r) => Text(
-                                r,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )).toList()
-                          : [
-                              Text(
-                                name,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                    ),
-                  ),
-                  childWhenDragging: Container(),
-                  child: ListTile(
+                return ListTile(
                     title: Text(name),
                     leading: Checkbox(
                       value: value,
@@ -214,8 +159,7 @@ class _MealPlannerState extends State<MealPlanner> {
                         _favoritSelection(name, newValue);
                       },
                     ),
-                  ),
-                );
+                  );
               },
             ),
           ),
