@@ -84,5 +84,5 @@ The project is structured as follows:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/recipe_app.git
+   git clone https://github.com/abigailsheldon/recipe_app.git
    cd recipe_app
