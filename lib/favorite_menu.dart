@@ -87,7 +87,6 @@ class _FavoriteMenuState extends State<FavoriteMenu> {
                               builder: (context) =>
                                   RecipeDetailPage(recipe: recipe)),
                         ).then((_) {
-                          // Optionally, refresh the favorites when returning.
                           _refreshFavorites();
                         });
                       } catch (e) {
