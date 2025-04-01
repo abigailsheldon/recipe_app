@@ -2,6 +2,8 @@
 
 A Flutter-based mobile application that helps users browse and manage recipes, view detailed recipe information, and create grocery lists—all with a retro pixel-art aesthetic.
 
+Youtube: https://www.youtube.com/watch?v=_4eljToVysQ&ab_channel=MADRecipeandMealPlannerApp 
+
 ## Table of Contents
 
 - [Overview](#overview)
